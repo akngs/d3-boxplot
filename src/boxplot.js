@@ -15,28 +15,35 @@ export function boxplot() {
     function boxplot(context) {
         var selection = context.selection ? context.selection() : context;
 
-        var fenceGroup = selection.select('g.fence');
-        if (fenceGroup.empty()) fenceGroup = selection.append('g').attr('class', 'fence');
+        var whiskerGroup = selection.select('g.whisker');
+        if (whiskerGroup.empty()) whiskerGroup = selection.append('g').attr('class', 'whisker');
+
+        var boxGroup = selection.select('g.box');
+        if (boxGroup.empty()) boxGroup = selection.append('g').attr('class', 'box');
 
         var pointGroup = selection.select('g.point');
         if (pointGroup.empty()) pointGroup = selection.append('g').attr('class', 'point');
         pointGroup.attr('transform', 'translate(' + (vertical ? bandwidth * 0.5 : 0) + ', ' + (vertical ? 0 : bandwidth * 0.5) + ')');
 
-        var fence = fenceGroup.selectAll('path.fence').data(function (d) {
-            return d.fences;
+        var whisker = whiskerGroup.selectAll('path').data(function (d) {
+            return d.whiskers;
         });
-        var fenceEnter = fence.enter()
+        var whiskerEnter = whisker.enter()
             .append('path')
-            .attr('class', function (d) {
-                return 'fence ' + d.type;
-            })
-            .attr('fill', function (d) {
-                return d.type === 'box' ? 'currentColor' : 'none';
-            })
+            .attr('fill', 'none')
             .attr('stroke', function (d) {
                 return d.type === 'box' ? 'none' : 'currentColor';
             });
-        fence = fence.merge(fenceEnter);
+        whisker = whisker.merge(whiskerEnter);
+
+        var box = boxGroup.selectAll('rect').data(function (d) {
+            return d.boxes;
+        });
+        var boxEnter = box.enter()
+            .append('rect')
+            .attr('fill', 'currentColor')
+            .attr('stroke', 'none');
+        box = box.merge(boxEnter);
 
         var point = pointGroup.selectAll('circle.point').data(function (d) {
             return d.points;
@@ -47,8 +54,12 @@ export function boxplot() {
         point = point.merge(pointEnter);
 
         if (context !== selection) {
-            fence = fence.transition(context);
-            fenceEnter
+            whisker = whisker.transition(context);
+            whiskerEnter
+                .attr('opacity', epsilon);
+
+            box = box.transition(context);
+            boxEnter
                 .attr('opacity', epsilon);
 
             point = point.transition(context);
@@ -61,13 +72,25 @@ export function boxplot() {
                 .attr('r', epsilon);
         }
 
-        fence
+        whisker
             .attr('opacity', function (d) {
                 return d.type === 'box' ? 0.6 : 1.0;
             })
-            .attr('d', function (d, i) {
-                return fencePath(d, i, scale, bandwidth, vertical)
+            .attr('d', function (d) {
+                var s = scale(d.start), e = scale(d.end), w = bandwidth;
+                return vertical ?
+                    'M' + [0, s] + ' L' + [w, s] + ' M' + [w * 0.5, s] + ' L' + [w * 0.5, e] + ' M' + [0, e] + ' L' + [w, e] :
+                    'M' + [s, 0] + ' L' + [s, w] + ' M' + [s, w * 0.5] + ' L' + [e, w * 0.5] + ' M' + [e, 0] + ' L' + [e, w];
             });
+
+        box
+            .attr('opacity', function (d) {
+                return d.type === 'box' ? 0.6 : 1.0;
+            })
+            .attr(vertical ? 'y' : 'x', function(d, i) {return scale(d.start) + (i === 0 ? 0 : 0.5);})
+            .attr(vertical ? 'x' : 'y', 0)
+            .attr(vertical ? 'height' : 'width', function(d, i) {return scale(d.end) - scale(d.start) - (i === 0 ? 0.5 : 0);})
+            .attr(vertical ? 'width' : 'height', bandwidth);
 
         point
             .attr('fill', 'currentColor')
@@ -123,16 +146,6 @@ export function boxplotStats(data) {
             end: fiveNums[1]
         },
         {
-            type: 'box',
-            start: fiveNums[1],
-            end: fiveNums[2]
-        },
-        {
-            type: 'box',
-            start: fiveNums[2],
-            end: fiveNums[3]
-        },
-        {
             type: 'inner',
             start: fiveNums[3],
             end: fiveNums[3] + step
@@ -143,16 +156,30 @@ export function boxplotStats(data) {
             end: fiveNums[3] + step + step
         }
     ];
+    var boxes = [
+        {
+            type: 'box',
+            start: fiveNums[1],
+            end: fiveNums[2]
+        },
+        {
+            type: 'box',
+            start: fiveNums[2],
+            end: fiveNums[3]
+        }
+    ];
     var whiskers = [
         {
+            type: 'whisker',
             start: d3min(data.filter(function (d) {
                 return fences[1].start <= d;
             })),
             end: fiveNums[1]
         },
         {
+            type: 'whisker',
             start: d3max(data.filter(function (d) {
-                return fences[4].end >= d;
+                return fences[3].end >= d;
             })),
             end: fiveNums[3]
         }
@@ -160,8 +187,8 @@ export function boxplotStats(data) {
     var points = data.map(function (d) {
         return {
             value: d,
-            outlier: d < fences[1].start || fences[4].end < d,
-            farout: d < fences[0].start || fences[5].end < d
+            outlier: d < fences[1].start || fences[2].end < d,
+            farout: d < fences[0].start || fences[3].end < d
         };
     });
 
@@ -170,23 +197,22 @@ export function boxplotStats(data) {
         iqr: iqr,
         step: step,
         fences: fences,
+        boxes: boxes,
         whiskers: whiskers,
         points: points
     };
 }
 
-function fencePath(d, i, scale, w, vertical) {
+function calcPath(d, i, scale, w, vertical) {
     var s = scale(d.start), e = scale(d.end);
 
-    if (d.type === 'outer') {
-        return '';
-    } else if (d.type === 'inner') {
+    if (d.type === 'whisker') {
         if (vertical) {
             return 'M' + [0, s] + ' L' + [w, s] + ' M' + [w * 0.5, s] + ' L' + [w * 0.5, e] + ' M' + [0, e] + ' L' + [w, e];
         } else {
             return 'M' + [s, 0] + ' L' + [s, w] + ' M' + [s, w * 0.5] + ' L' + [e, w * 0.5] + ' M' + [e, 0] + ' L' + [e, w];
         }
-    } else /* if (d.type === 'box') */ {
+    } else {
         if (i === 2) {
             e--;
         } else {

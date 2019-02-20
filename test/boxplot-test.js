@@ -10,14 +10,16 @@ tape("Statistics for single data point", function (test) {
         fences: [
             {type: 'outer', start: 5, end: 5},
             {type: 'inner', start: 5, end: 5},
-            {type: 'box', start: 5, end: 5},
-            {type: 'box', start: 5, end: 5},
             {type: 'inner', start: 5, end: 5},
             {type: 'outer', start: 5, end: 5}
         ],
+        boxes: [
+            {type: 'box', start: 5, end: 5},
+            {type: 'box', start: 5, end: 5},
+        ],
         whiskers: [
-            {start: 5, end: 5},
-            {start: 5, end: 5}
+            {type: 'whisker', start: 5, end: 5},
+            {type: 'whisker', start: 5, end: 5}
         ],
         points: [{value: 5, outlier: false, farout: false}]
     });
@@ -33,14 +35,16 @@ tape("Statistics", function (test) {
         fences: [
             {type: 'outer', start: -4, end: -1},
             {type: 'inner', start: -1, end: 2},
-            {type: 'box', start: 2, end: 3},
-            {type: 'box', start: 3, end: 4},
             {type: 'inner', start: 4, end: 7},
             {type: 'outer', start: 7, end: 10}
         ],
+        boxes: [
+            {type: 'box', start: 2, end: 3},
+            {type: 'box', start: 3, end: 4},
+        ],
         whiskers: [
-            {start: 1, end: 2},
-            {start: 5, end: 4}
+            {type: 'whisker', start: 1, end: 2},
+            {type: 'whisker', start: 5, end: 4}
         ],
         points: [
             {value: 1, outlier: false, farout: false},
