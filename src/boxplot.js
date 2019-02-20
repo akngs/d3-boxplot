@@ -7,6 +7,7 @@ export function boxplot() {
     var vertical = false;
     var scale = d3scaleLinear();
     var bandwidth = 20;
+    var showInnerDots = true;
     var jitter = true;
 
     var _pointRadius = bandwidth * 0.1;
@@ -60,18 +61,26 @@ export function boxplot() {
         box = box.merge(boxEnter);
 
         var point = pointGroup.selectAll('circle.point').data(function (d) {
-            return d.points;
+            return showInnerDots ? d.points : d.points.filter(function (d) {
+                return d.outlier;
+            });
         });
         var pointEnter = point.enter().append('circle')
             .attr('class', 'point')
-            .attr(vertical ? 'cx' : 'cy', function (d) {
+             .attr(vertical ? 'cx' : 'cy', function (d) {
                 return jitter ? (Math.random() - 0.5) * (d.farout ? 0.0 : d.outlier ? 0.1 : 0.2) * bandwidth : 0;
             })
             .attr(vertical ? 'cy' : 'cx', function (d) {
                 return scale(d.value);
             });
         var pointExit = point.exit();
-        point = point.merge(pointEnter);
+        point = point.merge(pointEnter)
+            .classed('outlier', function (d) {
+                return d.outlier;
+            })
+            .classed('farout', function (d) {
+                return d.farout;
+            });
 
         if (context !== selection) {
             whisker = whisker.transition(context);
@@ -141,6 +150,9 @@ export function boxplot() {
     };
     boxplot.scale = function (_) {
         return arguments.length ? (scale = _, boxplot) : scale;
+    };
+    boxplot.showInnerDots = function (_) {
+        return arguments.length ? (showInnerDots = _, boxplot) : showInnerDots;
     };
     boxplot.bandwidth = function (_) {
         return arguments.length ? (bandwidth = _, boxplot) : bandwidth;

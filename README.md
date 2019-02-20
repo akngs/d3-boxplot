@@ -42,6 +42,12 @@ If *bandwidth* is specified, sets the bandwidth of the plot. Bandwidth is a pixe
 a thickness of the plot. If *bandwidth* is not specified, returns the current bandwidth. The
 default value is `20`.
 
+<a href="#boxplot_showInnerDots" name="boxplot_showInnerDots">#</a> boxplot.<b>showInnerDots</b>([*flag*])
+
+If *flag* is specified, sets the option. Set it `true` to show all data dots, or `false` to show
+only outliers (and far-outs).Bandwidthis a pixel value specifying If *flag* is not specified,
+returns the current value. The default value is `true`.
+
 <a href="#boxplot_jitter" name="boxplot_jitter">#</a> boxplot.<b>jitter</b>([*jitter*])
 
 If *jitter* is specified, sets the jittering mode. If *jitter* is not specified, returns the
