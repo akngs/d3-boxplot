@@ -33,6 +33,12 @@ export function boxplot() {
             .attr('fill', 'none')
             .attr('stroke', function (d) {
                 return d.type === 'box' ? 'none' : 'currentColor';
+            })
+            .attr('d', function (d) {
+                var s = scale(d.start), e = scale(d.end), w = bandwidth;
+                return vertical ?
+                    'M' + [0, s] + ' L' + [w, s] + ' M' + [w * 0.5, s] + ' L' + [w * 0.5, e] + ' M' + [0, e] + ' L' + [w, e] :
+                    'M' + [s, 0] + ' L' + [s, w] + ' M' + [s, w * 0.5] + ' L' + [e, w * 0.5] + ' M' + [e, 0] + ' L' + [e, w];
             });
         whisker = whisker.merge(whiskerEnter);
 
@@ -42,14 +48,28 @@ export function boxplot() {
         var boxEnter = box.enter()
             .append('rect')
             .attr('fill', 'currentColor')
-            .attr('stroke', 'none');
+            .attr('stroke', 'none')
+            .attr(vertical ? 'y' : 'x', function (d, i) {
+                return scale(d.start) + (i === 0 ? 0 : 0.5);
+            })
+            .attr(vertical ? 'x' : 'y', 0)
+            .attr(vertical ? 'height' : 'width', function (d, i) {
+                return scale(d.end) - scale(d.start) - (i === 0 ? 0.5 : 0);
+            })
+            .attr(vertical ? 'width' : 'height', bandwidth);
         box = box.merge(boxEnter);
 
         var point = pointGroup.selectAll('circle.point').data(function (d) {
             return d.points;
         });
         var pointEnter = point.enter().append('circle')
-            .attr('class', 'point');
+            .attr('class', 'point')
+            .attr(vertical ? 'cx' : 'cy', function (d) {
+                return jitter ? (Math.random() - 0.5) * (d.farout ? 0.0 : d.outlier ? 0.1 : 0.2) * bandwidth : 0;
+            })
+            .attr(vertical ? 'cy' : 'cx', function (d) {
+                return scale(d.value);
+            });
         var pointExit = point.exit();
         point = point.merge(pointEnter);
 
@@ -87,9 +107,13 @@ export function boxplot() {
             .attr('opacity', function (d) {
                 return d.type === 'box' ? 0.6 : 1.0;
             })
-            .attr(vertical ? 'y' : 'x', function(d, i) {return scale(d.start) + (i === 0 ? 0 : 0.5);})
+            .attr(vertical ? 'y' : 'x', function (d, i) {
+                return scale(d.start) + (i === 0 ? 0 : 0.5);
+            })
             .attr(vertical ? 'x' : 'y', 0)
-            .attr(vertical ? 'height' : 'width', function(d, i) {return scale(d.end) - scale(d.start) - (i === 0 ? 0.5 : 0);})
+            .attr(vertical ? 'height' : 'width', function (d, i) {
+                return scale(d.end) - scale(d.start) - (i === 0 ? 0.5 : 0);
+            })
             .attr(vertical ? 'width' : 'height', bandwidth);
 
         point
