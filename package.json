@@ -1,0 +1,33 @@
+{
+  "name": "d3-boxplot",
+  "version": "0.1.0",
+  "description": "d3js plugin for box-and-whisker plot",
+  "keywords": [
+    "d3",
+    "d3-module",
+    "boxplot"
+  ],
+  "license": "BSD-3-Clause",
+  "main": "build/d3-boxplot.js",
+  "jsnext:main": "index",
+  "homepage": "https://github.com/akngs/d3-boxplot",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/akngs/d3-boxplot.git"
+  },
+  "scripts": {
+    "pretest": "rm -rf build && mkdir build && rollup -f umd -g d3-array:d3,d3-scale:d3 -n d3 -o build/d3-boxplot.js -- index.js",
+    "test": "tape 'test/**/*-test.js'",
+    "prepublish": "npm run test && uglifyjs build/d3-boxplot.js -c -m -o build/d3-boxplot.min.js",
+    "postpublish": "zip -j build/d3-boxplot.zip -- LICENSE README.md build/d3-boxplot.js build/d3-boxplot.min.js"
+  },
+  "devDependencies": {
+    "rollup": "0.27.1",
+    "tape": "4",
+    "uglify-js": "3.4.9"
+  },
+  "dependencies": {
+    "d3-array": "^2.0.3",
+    "d3-scale": "^2.2.2"
+  }
+}
