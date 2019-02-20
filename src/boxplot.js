@@ -226,26 +226,3 @@ export function boxplotStats(data) {
         points: points
     };
 }
-
-function calcPath(d, i, scale, w, vertical) {
-    var s = scale(d.start), e = scale(d.end);
-
-    if (d.type === 'whisker') {
-        if (vertical) {
-            return 'M' + [0, s] + ' L' + [w, s] + ' M' + [w * 0.5, s] + ' L' + [w * 0.5, e] + ' M' + [0, e] + ' L' + [w, e];
-        } else {
-            return 'M' + [s, 0] + ' L' + [s, w] + ' M' + [s, w * 0.5] + ' L' + [e, w * 0.5] + ' M' + [e, 0] + ' L' + [e, w];
-        }
-    } else {
-        if (i === 2) {
-            e--;
-        } else {
-            s++;
-        }
-        if (vertical) {
-            return 'M' + [0, s] + ' L' + [0, e] + ' L' + [w, e] + ' L' + [w, s] + ' Z';
-        } else {
-            return 'M' + [s, 0] + ' L' + [e, 0] + ' L' + [e, w] + ' L' + [s, w] + ' Z';
-        }
-    }
-}
