@@ -179,7 +179,7 @@ export function boxplotStats(data) {
         {
             type: 'whisker',
             start: d3max(data.filter(function (d) {
-                return fences[3].end >= d;
+                return fences[2].end >= d;
             })),
             end: fiveNums[3]
         }
