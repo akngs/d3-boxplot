@@ -24,7 +24,7 @@ export function boxplot() {
 
         var pointGroup = selection.select('g.point');
         if (pointGroup.empty()) pointGroup = selection.append('g').attr('class', 'point');
-        pointGroup.attr('transform', 'translate(' + (vertical ? bandwidth * 0.5 : 0) + ', ' + (vertical ? 0 : bandwidth * 0.5) + ')');
+        pointGroup.attr('transform', 'translate(' + (vertical ? [bandwidth * 0.5, 0] : [0, bandwidth * 0.5]) + ')');
 
         var whisker = whiskerGroup.selectAll('path').data(function (d) {
             return d.whiskers;
@@ -35,12 +35,7 @@ export function boxplot() {
             .attr('stroke', function (d) {
                 return d.type === 'box' ? 'none' : 'currentColor';
             })
-            .attr('d', function (d) {
-                var s = scale(d.start), e = scale(d.end), w = bandwidth;
-                return vertical ?
-                    'M' + [0, s] + ' L' + [w, s] + ' M' + [w * 0.5, s] + ' L' + [w * 0.5, e] + ' M' + [0, e] + ' L' + [w, e] :
-                    'M' + [s, 0] + ' L' + [s, w] + ' M' + [s, w * 0.5] + ' L' + [e, w * 0.5] + ' M' + [e, 0] + ' L' + [e, w];
-            });
+            .attr('d', whiskerPath);
         whisker = whisker.merge(whiskerEnter);
 
         var box = boxGroup.selectAll('rect').data(function (d) {
@@ -66,13 +61,7 @@ export function boxplot() {
             });
         });
         var pointEnter = point.enter().append('circle')
-            .attr('class', 'point')
-             .attr(vertical ? 'cx' : 'cy', function (d) {
-                return jitter ? (Math.random() - 0.5) * (d.farout ? 0.0 : d.outlier ? 0.1 : 0.2) * bandwidth : 0;
-            })
-            .attr(vertical ? 'cy' : 'cx', function (d) {
-                return scale(d.value);
-            });
+            .attr('class', 'point');
         var pointExit = point.exit();
         point = point.merge(pointEnter)
             .classed('outlier', function (d) {
@@ -80,6 +69,12 @@ export function boxplot() {
             })
             .classed('farout', function (d) {
                 return d.farout;
+            })
+            .attr(vertical ? 'cx' : 'cy', function (d) {
+                return jitter ? (Math.random() - 0.5) * (d.farout ? 0.0 : d.outlier ? 0.1 : 0.2) * bandwidth : 0;
+            })
+            .attr(vertical ? 'cy' : 'cx', function (d) {
+                return scale(d.value);
             });
 
         if (context !== selection) {
@@ -105,12 +100,7 @@ export function boxplot() {
             .attr('opacity', function (d) {
                 return d.type === 'box' ? 0.6 : 1.0;
             })
-            .attr('d', function (d) {
-                var s = scale(d.start), e = scale(d.end), w = bandwidth;
-                return vertical ?
-                    'M' + [0, s] + ' L' + [w, s] + ' M' + [w * 0.5, s] + ' L' + [w * 0.5, e] + ' M' + [0, e] + ' L' + [w, e] :
-                    'M' + [s, 0] + ' L' + [s, w] + ' M' + [s, w * 0.5] + ' L' + [e, w * 0.5] + ' M' + [e, 0] + ' L' + [e, w];
-            });
+            .attr('d', whiskerPath);
 
         box
             .attr('opacity', function (d) {
@@ -132,12 +122,6 @@ export function boxplot() {
             })
             .attr('opacity', function (d) {
                 return d.farout ? 0.9 : d.outlier ? 0.8 : 0.5;
-            })
-            .attr(vertical ? 'cx' : 'cy', function (d) {
-                return jitter ? (Math.random() - 0.5) * (d.farout ? 0.0 : d.outlier ? 0.1 : 0.2) * bandwidth : 0;
-            })
-            .attr(vertical ? 'cy' : 'cx', function (d) {
-                return scale(d.value);
             });
         pointExit
             .remove();
@@ -160,6 +144,14 @@ export function boxplot() {
     boxplot.jitter = function (_) {
         return arguments.length ? (jitter = _, boxplot) : jitter;
     };
+
+    function whiskerPath(d) {
+        var s = scale(d.start), e = scale(d.end), w = bandwidth;
+        var pathFrags = vertical ?
+            ['M', [0, s], 'L', [w, s], 'M', [w * 0.5, s], 'L', [w * 0.5, e], 'M', [0, e], 'L', [w, e]] :
+            ['M', [s, 0], 'L', [s, w], 'M', [s, w * 0.5], 'L', [e, w * 0.5], 'M', [e, 0], 'L', [e, w]];
+        return pathFrags.join('');
+    }
 
     return boxplot;
 }
