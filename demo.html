@@ -31,7 +31,7 @@
 <script>
     function render(data, svg, w, h, transition) {
         var stats = data.map(function (d) {
-            return d3.boxplotStats(d);
+            return d3.boxplotStats(d, function(d) {return d.x;});
         });
 
         var vertical = w < h;
@@ -75,8 +75,10 @@
         var data = [];
         for (let i = 0; i < 6; i++) {
             data.push(d3.range(Math.random() * 10 + 20 | 0).map(function () {
-                return rand();
-            }).sort(d3.ascending));
+                return {x: rand(), y: rand()};
+            }).sort(function(a, b) {
+                return d3.ascending(a.x, b.x);
+            }));
         }
 
         render(data, document.querySelector('#svg1'), 300, 200, true);

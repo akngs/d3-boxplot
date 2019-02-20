@@ -152,9 +152,11 @@ export function boxplot() {
     return boxplot;
 }
 
-export function boxplotStats(data) {
+export function boxplotStats(data, valueof) {
+    var values = valueof ? data.map(valueof) : data;
+
     var fiveNums = [0.00, 0.25, 0.50, 0.75, 1.00].map(function (d) {
-        return d3quantile(data, d);
+        return d3quantile(values, d);
     });
     var iqr = fiveNums[3] - fiveNums[1];
     var step = iqr * 1.5;
@@ -195,22 +197,23 @@ export function boxplotStats(data) {
     var whiskers = [
         {
             type: 'whisker',
-            start: d3min(data.filter(function (d) {
+            start: d3min(values.filter(function (d) {
                 return fences[1].start <= d;
             })),
             end: fiveNums[1]
         },
         {
             type: 'whisker',
-            start: d3max(data.filter(function (d) {
+            start: d3max(values.filter(function (d) {
                 return fences[2].end >= d;
             })),
             end: fiveNums[3]
         }
     ];
-    var points = data.map(function (d) {
+    var points = values.map(function (d, i) {
         return {
             value: d,
+            datum: data[i],
             outlier: d < fences[1].start || fences[2].end < d,
             farout: d < fences[0].start || fences[3].end < d
         };

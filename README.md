@@ -18,10 +18,12 @@ Visit [this page](https://beta.observablehq.com/@akngs/d3-boxplot) to see exampl
 
 Constructs a new box plot generator with the default settings.
 
-<a href="#boxplotStats" name="boxplotStats">#</a> d3.<b>boxplotStats</b>(data)
+<a href="#boxplotStats" name="boxplotStats">#</a> d3.<b>boxplotStats</b>(data, [*accessor*])
 
 Calculates descriptive statistics such as five-number summeries, IQR,
-and inner/outer fences. `data` is an array containing numerical values.
+and inner/outer fences of given **sorted** array `data`. If type elements in `data` is
+not a number, you should provide an *accessor* function as the second argument and the
+array should be sorted according to the *accessor*.
 
 <a href="#boxplot_vertical" name="boxplot_vertical">#</a> boxplot.<b>vertical</b>([*vertical*])
 
