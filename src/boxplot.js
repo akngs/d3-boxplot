@@ -7,6 +7,7 @@ export function boxplot() {
     var vertical = false;
     var scale = d3scaleLinear();
     var bandwidth = 20;
+    var boxwidth = 20;
     var showInnerDots = true;
     var jitter = true;
 
@@ -18,9 +19,11 @@ export function boxplot() {
 
         var whiskerGroup = selection.select('g.whisker');
         if (whiskerGroup.empty()) whiskerGroup = selection.append('g').attr('class', 'whisker');
+        whiskerGroup.attr('transform', 'translate(' + (vertical ? [bandwidth * 0.5, 0] : [0, bandwidth * 0.5]) + ')');
 
         var boxGroup = selection.select('g.box');
         if (boxGroup.empty()) boxGroup = selection.append('g').attr('class', 'box');
+        boxGroup.attr('transform', 'translate(' + (vertical ? [bandwidth * 0.5, 0] : [0, bandwidth * 0.5]) + ')');
 
         var pointGroup = selection.select('g.point');
         if (pointGroup.empty()) pointGroup = selection.append('g').attr('class', 'point');
@@ -141,6 +144,9 @@ export function boxplot() {
     boxplot.bandwidth = function (_) {
         return arguments.length ? (bandwidth = _, boxplot) : bandwidth;
     };
+    boxplot.boxwidth = function (_) {
+        return arguments.length ? (boxwidth = _, boxplot) : boxwidth;
+    };
     boxplot.jitter = function (_) {
         return arguments.length ? (jitter = _, boxplot) : jitter;
     };
@@ -148,8 +154,8 @@ export function boxplot() {
     function whiskerPath(d) {
         var s = scale(d.start), e = scale(d.end), w = bandwidth;
         var pathFrags = vertical ?
-            ['M', [0, s], 'L', [w, s], 'M', [w * 0.5, s], 'L', [w * 0.5, e], 'M', [0, e], 'L', [w, e]] :
-            ['M', [s, 0], 'L', [s, w], 'M', [s, w * 0.5], 'L', [e, w * 0.5], 'M', [e, 0], 'L', [e, w]];
+            ['M', [-.5 * w, s], 'L', [.5 * w, s], 'M', [0, s], 'L', [0, e], 'M', [-.5 * w, e], 'L', [.5 * w, e]] :
+            ['M', [s, -.5 * w], 'L', [s, .5 * w], 'M', [s, 0], 'L', [e, 0], 'M', [e, -.5 * w], 'L', [e, .5 * w]];
         return pathFrags.join('');
     }
 

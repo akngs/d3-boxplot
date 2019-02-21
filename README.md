@@ -66,19 +66,25 @@ Visit [Box plot explained](https://beta.observablehq.com/@akngs/box-plot-explain
 
 <a href="#boxplot_vertical" name="boxplot_vertical">#</a> boxplot.<b>vertical</b>([*vertical*])
 
-If *vertical* is specified, sets the vertical mode. If *vertical* is not specified, returns the
-current vertical mode. The default value is `false`.
+Sets or returns *vertical* mode. The default value is `false` which means a horizontal mode.
 
 <a href="#boxplot_scale" name="boxplot_scale">#</a> boxplot.<b>scale</b>([*scale*])
 
-If *scale* is specified, sets the scale. If *scale* is not specified, returns the current scale.
-The default value is `d3.scaleLinear()` instance with default values.
+Sets or returns *scale*. The default value is `d3.scaleLinear()` instance with domain `[0, 1]`, and
+range `[0, 1]`.
 
 <a href="#boxplot_bandwidth" name="boxplot_bandwidth">#</a> boxplot.<b>bandwidth</b>([*bandwidth*])
 
-If *bandwidth* is specified, sets the bandwidth of the plot. Bandwidth is a pixel value specifying
-a thickness of the plot. If *bandwidth* is not specified, returns the current bandwidth. The
+Sets or returns *bandwidth*. Bandwidth is a pixel value specifying a thickness of the plot. The
 default value is `20`.
+
+<a href="#boxplot_boxwidth" name="boxplot_boxwidth">#</a> boxplot.<b>boxwidth</b>([*boxwidth*])
+
+Sets or returns *boxwidth*. Boxwidth is a pixel value specifying a thickness of the IQR box. The
+default value is `20`. By setting this value to 3 and hide inner dots by call
+`showInnerDots(false)`, you can render minimalistic box plots mimic Edward Tufte's style:
+
+![Minimalistic box plot](d3-boxplot-minimal.png)
 
 <a href="#boxplot_showInnerDots" name="boxplot_showInnerDots">#</a> boxplot.<b>showInnerDots</b>([*flag*])
 
