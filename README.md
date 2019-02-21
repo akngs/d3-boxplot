@@ -84,7 +84,7 @@ Sets or returns *boxwidth*. Boxwidth is a pixel value specifying a thickness of 
 default value is `20`. By setting this value to 3 and hide inner dots by call
 `showInnerDots(false)`, you can render minimalistic box plots mimic Edward Tufte's style:
 
-![Minimalistic box plot](d3-boxplot-minimal.png)
+![Minimalistic box plot](d3-boxplot-minimalStyle.png)
 
 <a href="#boxplot_showInnerDots" name="boxplot_showInnerDots">#</a> boxplot.<b>showInnerDots</b>([*flag*])
 
