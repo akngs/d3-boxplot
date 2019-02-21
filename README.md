@@ -13,18 +13,20 @@ If you use NPM, `npm install d3-boxplot`. Otherwise, download the
 
 Here's a minimal code snippet:
 
-    <script src="d3.v5.js"></script>
-    <script src="d3-boxplot.js"></script>
+```html
+<script src="d3.v5.js"></script>
+<script src="d3-boxplot.js"></script>
 
-    <script>
-    var data = [1, 2, 3, 4, 5];
-    var stats = d3.boxplotStats(data);
-    var x = d3.scaleLinear()
-      .domain(d3.extent(data))
-      .range([0, 300]);
-    var plot = d3.boxplot().scale(x);
-    d3.select('svg').datum(stats).call(plot);
-    </script>
+<script>
+var data = [1, 2, 3, 4, 5];
+var stats = d3.boxplotStats(data);
+var x = d3.scaleLinear()
+  .domain(d3.extent(data))
+  .range([0, 300]);
+var plot = d3.boxplot().scale(x);
+d3.select('svg').datum(stats).call(plot);
+</script>
+```
 
 Visit [this page](https://beta.observablehq.com/@akngs/d3-boxplot) to see more examples.
 
@@ -44,18 +46,22 @@ the *accessor*.
 If you have multiple batches of data, you may use `Array.map()` to turn them into box plot
 statistics:
 
-    var batches = [
-      [1,2,3,4,5],
-      [6,7,8,9,10]
-    ];
-    var stats = batches.map(function(b) {return d3.boxplotStats(b);});
+```javascript
+var batches = [
+  [1,2,3,4,5],
+  [6,7,8,9,10]
+];
+var stats = batches.map(function(b) {return d3.boxplotStats(b);});
+```
 
 Now you can draw small-multiples of box plots using conventional d3 code:
 
-    d3.select('svg').selectAll('g.plot').data(stats)
-      .join('g')
-      .attr('transform', function(d, i) {return 'translate(...)';})
-      .call(d3.boxplot())
+```javascript
+d3.select('svg').selectAll('g.plot').data(stats)
+  .join('g')
+  .attr('transform', function(d, i) {return 'translate(...)';})
+  .call(d3.boxplot())
+```
 
 Box plot statistics are also useful to render additional annotations on top of a box plot, like
 this:
