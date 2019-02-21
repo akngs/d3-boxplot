@@ -94,9 +94,14 @@ default value is `20`. By setting this value to 3 and hide inner dots by call
 
 <a href="#boxplot_showInnerDots" name="boxplot_showInnerDots">#</a> boxplot.<b>showInnerDots</b>([*flag*])
 
-If *flag* is specified, sets the option. Set it `true` to show all data dots, or `false` to show
-only outliers (and far-outs).Bandwidthis a pixel value specifying If *flag* is not specified,
-returns the current value. The default value is `true`.
+Sets or returns *showInnerDots flag*. Set it `true` to show all data dots, or `false` to show
+only outliers (and far-outs). The default value is `true`.
+
+<a href="#boxplot_opacity" name="boxplot_opacity">#</a> boxplot.<b>opacity</b>([*opacity*])
+
+If *opacity* is specified, sets the opacity mode. If *opacity* is not specified, returns the
+current opacity. The default value is `0.8`. Partial transparency helps you to reveal dots under
+the box.
 
 <a href="#boxplot_jitter" name="boxplot_jitter">#</a> boxplot.<b>jitter</b>([*jitter*])
 

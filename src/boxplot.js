@@ -9,6 +9,7 @@ export function boxplot() {
     var bandwidth = 20;
     var boxwidth = 20;
     var showInnerDots = true;
+    var opacity = 0.8;
     var jitter = true;
 
     var _pointRadius = bandwidth * 0.1;
@@ -100,15 +101,10 @@ export function boxplot() {
         }
 
         whisker
-            .attr('opacity', function (d) {
-                return d.type === 'box' ? 0.6 : 1.0;
-            })
-            .attr('d', whiskerPath);
+            .attr('d', whiskerPath)
+            .attr('opacity', opacity);
 
         box
-            .attr('opacity', function (d) {
-                return d.type === 'box' ? 0.6 : 1.0;
-            })
             .attr(vertical ? 'y' : 'x', function (d, i) {
                 return scale(d.start) + (i === 0 ? 0 : 0.5);
             })
@@ -116,16 +112,15 @@ export function boxplot() {
             .attr(vertical ? 'height' : 'width', function (d, i) {
                 return scale(d.end) - scale(d.start) - (i === 0 ? 0.5 : 0);
             })
-            .attr(vertical ? 'width' : 'height', boxwidth);
+            .attr(vertical ? 'width' : 'height', boxwidth)
+            .attr('opacity', opacity);
 
         point
             .attr('fill', 'currentColor')
             .attr('r', function (d) {
                 return d.farout ? _faroutRadius : _pointRadius;
             })
-            .attr('opacity', function (d) {
-                return d.farout ? 0.9 : d.outlier ? 0.8 : 0.5;
-            });
+            .attr('opacity', opacity);
         pointExit
             .remove();
 
@@ -146,6 +141,9 @@ export function boxplot() {
     };
     boxplot.boxwidth = function (_) {
         return arguments.length ? (boxwidth = _, boxplot) : boxwidth;
+    };
+    boxplot.opacity = function (_) {
+        return arguments.length ? (opacity = _, boxplot) : opacity;
     };
     boxplot.jitter = function (_) {
         return arguments.length ? (jitter = _, boxplot) : jitter;
