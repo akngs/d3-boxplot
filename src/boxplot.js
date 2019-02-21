@@ -51,11 +51,11 @@ export function boxplot() {
             .attr(vertical ? 'y' : 'x', function (d, i) {
                 return scale(d.start) + (i === 0 ? 0 : 0.5);
             })
-            .attr(vertical ? 'x' : 'y', 0)
+            .attr(vertical ? 'x' : 'y', -.5 * boxwidth)
             .attr(vertical ? 'height' : 'width', function (d, i) {
                 return scale(d.end) - scale(d.start) - (i === 0 ? 0.5 : 0);
             })
-            .attr(vertical ? 'width' : 'height', bandwidth);
+            .attr(vertical ? 'width' : 'height', boxwidth);
         box = box.merge(boxEnter);
 
         var point = pointGroup.selectAll('circle.point').data(function (d) {
@@ -112,11 +112,11 @@ export function boxplot() {
             .attr(vertical ? 'y' : 'x', function (d, i) {
                 return scale(d.start) + (i === 0 ? 0 : 0.5);
             })
-            .attr(vertical ? 'x' : 'y', 0)
+            .attr(vertical ? 'x' : 'y', -.5 * boxwidth)
             .attr(vertical ? 'height' : 'width', function (d, i) {
                 return scale(d.end) - scale(d.start) - (i === 0 ? 0.5 : 0);
             })
-            .attr(vertical ? 'width' : 'height', bandwidth);
+            .attr(vertical ? 'width' : 'height', boxwidth);
 
         point
             .attr('fill', 'currentColor')
@@ -152,7 +152,7 @@ export function boxplot() {
     };
 
     function whiskerPath(d) {
-        var s = scale(d.start), e = scale(d.end), w = bandwidth;
+        var s = scale(d.start), e = scale(d.end), w = boxwidth;
         var pathFrags = vertical ?
             ['M', [-.5 * w, s], 'L', [.5 * w, s], 'M', [0, s], 'L', [0, e], 'M', [-.5 * w, e], 'L', [.5 * w, e]] :
             ['M', [s, -.5 * w], 'L', [s, .5 * w], 'M', [s, 0], 'L', [e, 0], 'M', [e, -.5 * w], 'L', [e, .5 * w]];
