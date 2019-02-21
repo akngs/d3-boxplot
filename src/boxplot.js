@@ -151,10 +151,10 @@ export function boxplot() {
 
     function whiskerPath(d) {
         var s = scale(d.start), e = scale(d.end), w = boxwidth;
-        var pathFrags = vertical ?
-            ['M', [-.5 * w, s], 'L', [.5 * w, s], 'M', [0, s], 'L', [0, e], 'M', [-.5 * w, e], 'L', [.5 * w, e]] :
-            ['M', [s, -.5 * w], 'L', [s, .5 * w], 'M', [s, 0], 'L', [e, 0], 'M', [e, -.5 * w], 'L', [e, .5 * w]];
-        return pathFrags.join('');
+        var frags = vertical ?
+            ['M', [-.5 * w, s], 'L', [.5 * w, s], 'M', [0, s], 'L', [0, e]] :
+            ['M', [s, -.5 * w], 'L', [s, .5 * w], 'M', [s, 0], 'L', [e, 0]];
+        return frags.join('');
     }
 
     return boxplot;
