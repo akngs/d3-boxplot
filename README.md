@@ -7,7 +7,7 @@ d3js plugin for box-and-whisker plot.
 ## Installing
 
 If you use NPM, `npm install d3-boxplot`. Otherwise, download the
-[latest release](https://github.com/aknngs/d3-boxplot/releases/latest).
+[latest release](https://github.com/akngs/d3-boxplot/releases/latest).
 
 ## Usage
 
