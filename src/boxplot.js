@@ -176,6 +176,11 @@ export function boxplotStats(data, valueof) {
             end: fiveNums[1]
         },
         {
+            type: 'iqr',
+            start: fiveNums[1],
+            end: fiveNums[3],
+        },
+        {
             type: 'inner',
             start: fiveNums[3],
             end: fiveNums[3] + step
@@ -209,7 +214,7 @@ export function boxplotStats(data, valueof) {
         {
             type: 'whisker',
             start: d3max(values.filter(function (d) {
-                return fences[2].end >= d;
+                return fences[3].end >= d;
             })),
             end: fiveNums[3]
         }
@@ -218,8 +223,8 @@ export function boxplotStats(data, valueof) {
         return {
             value: d,
             datum: data[i],
-            outlier: d < fences[1].start || fences[2].end < d,
-            farout: d < fences[0].start || fences[3].end < d
+            outlier: d < fences[1].start || fences[3].end < d,
+            farout: d < fences[0].start || fences[4].end < d
         };
     });
 

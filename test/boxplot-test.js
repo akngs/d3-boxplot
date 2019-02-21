@@ -10,6 +10,7 @@ tape("Statistics for single data point", function (test) {
         fences: [
             {type: 'outer', start: 5, end: 5},
             {type: 'inner', start: 5, end: 5},
+            {type: 'iqr', start: 5, end: 5},
             {type: 'inner', start: 5, end: 5},
             {type: 'outer', start: 5, end: 5}
         ],
@@ -35,6 +36,7 @@ tape("Statistics", function (test) {
         fences: [
             {type: 'outer', start: -4, end: -1},
             {type: 'inner', start: -1, end: 2},
+            {type: 'iqr', start: 2, end: 4},
             {type: 'inner', start: 4, end: 7},
             {type: 'outer', start: 7, end: 10}
         ],
@@ -58,14 +60,16 @@ tape("Statistics", function (test) {
 });
 
 tape("Statistics with accessor", function (test) {
-    var data =[
+    var data = [
         {x: 1, y: 2},
         {x: 2, y: 3},
         {x: 3, y: 4},
         {x: 4, y: 5},
         {x: 5, y: 6},
     ];
-    var xStats = boxplot.boxplotStats(data, function(d) {return d.x;});
+    var xStats = boxplot.boxplotStats(data, function (d) {
+        return d.x;
+    });
     test.deepEqual(xStats, {
         fiveNums: [1, 2, 3, 4, 5],
         iqr: 2,
@@ -73,6 +77,7 @@ tape("Statistics with accessor", function (test) {
         fences: [
             {type: 'outer', start: -4, end: -1},
             {type: 'inner', start: -1, end: 2},
+            {type: 'iqr', start: 2, end: 4},
             {type: 'inner', start: 4, end: 7},
             {type: 'outer', start: 7, end: 10}
         ],
