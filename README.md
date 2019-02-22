@@ -105,5 +105,5 @@ the box.
 
 <a href="#boxplot_jitter" name="boxplot_jitter">#</a> boxplot.<b>jitter</b>([*jitter*])
 
-If *jitter* is specified, sets the jittering mode. If *jitter* is not specified, returns the
-current jittering mode. The default value is `true`.
+Sets or returns *jitter*ing value. Actual value used is *bandwidth * jitter*. Set the value `0.0`
+to disable jittering. The default value is `0.5`.

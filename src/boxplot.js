@@ -10,7 +10,7 @@ export function boxplot() {
     var boxwidth = 20;
     var showInnerDots = true;
     var opacity = 0.8;
-    var jitter = true;
+    var jitter = 0.2;
 
     var _pointRadius = bandwidth * 0.1;
     var _faroutRadius = _pointRadius * 1.5;
@@ -75,7 +75,9 @@ export function boxplot() {
                 return d.farout;
             })
             .attr(vertical ? 'cx' : 'cy', function (d) {
-                return jitter ? (Math.random() - 0.5) * (d.farout ? 0.0 : d.outlier ? 0.1 : 0.2) * bandwidth : 0;
+                return jitter === 0 ?
+                    0 :
+                    (Math.random() - 0.5) * (d.farout ? 0.0 : d.outlier ? 0.5 : 1.0) * jitter * bandwidth;
             })
             .attr(vertical ? 'cy' : 'cx', function (d) {
                 return scale(d.value);

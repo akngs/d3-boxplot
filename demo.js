@@ -18,7 +18,7 @@ function render(data, svg, w, h, transition) {
         .scale(axis1)
         .bandwidth(axis2.bandwidth())
         .vertical(vertical)
-        .jitter(true);
+        .jitter(0.2);
 
     var root = d3.select(svg)
         .attr('width', w)
