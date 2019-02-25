@@ -21,23 +21,22 @@ export function boxplot() {
     const coor = vertical ? (x, y) => [y, x] : (x, y) => [x, y]
 
     const selection = context.selection ? context.selection() : context
-    const rootTranslate = coor(0, bandwidth * .5)
-    const whiskerPath = d => {
-      const s = scale(d.start), e = scale(d.end), w = boxwidth
-      return `M${coor(s, -.5 * w)} L${coor(s, .5 * w)} M${coor(s, 0)} L${coor(e, 0)}`
-    }
+    const whiskerPath = d => `M${coor(scale(d.start), -.5 * boxwidth)} l${coor(0, boxwidth)} m${coor(0, -.5 * boxwidth)} L${coor(scale(d.end), 0)}`
 
     let gWhisker = selection.select('g.whisker')
-    if (gWhisker.empty()) gWhisker = selection.append('g').attr('class', 'whisker')
-    gWhisker.attr('transform', `translate(${rootTranslate})`)
+    if (gWhisker.empty()) gWhisker = selection.append('g')
+      .attr('class', 'whisker')
+      .attr('transform', `translate(${coor(0, bandwidth * .5)})`)
 
     let gBox = selection.select('g.box')
-    if (gBox.empty()) gBox = selection.append('g').attr('class', 'box')
-    gBox.attr('transform', `translate(${rootTranslate})`)
+    if (gBox.empty()) gBox = selection.append('g')
+      .attr('class', 'box')
+      .attr('transform', `translate(${coor(0, bandwidth * .5)})`)
 
     let gPoint = selection.select('g.point')
-    if (gPoint.empty()) gPoint = selection.append('g').attr('class', 'point')
-    gPoint.attr('transform', `translate(${rootTranslate})`)
+    if (gPoint.empty()) gPoint = selection.append('g')
+      .attr('class', 'point')
+      .attr('transform', `translate(${coor(0, bandwidth * .5)})`)
 
     let whisker = gWhisker.selectAll('path').data(d => d.whiskers)
     whisker = whisker.enter().append('path')
@@ -75,12 +74,21 @@ export function boxplot() {
       .classed('farout', d => d.farout)
 
     if (context !== selection) {
+      gWhisker = gWhisker.transition(context)
+      gBox = gBox.transition(context)
+      gPoint = gPoint.transition(context)
       whisker = whisker.transition(context)
       box = box.transition(context)
       point = point.transition(context)
       pointExit = pointExit.transition(context)
     }
 
+    gWhisker
+      .attr('transform', `translate(${coor(0, bandwidth * .5)})`)
+    gBox
+      .attr('transform', `translate(${coor(0, bandwidth * .5)})`)
+    gPoint
+      .attr('transform', `translate(${coor(0, bandwidth * .5)})`)
     whisker
       .attr('opacity', opacity)
       .attr('d', whiskerPath)
