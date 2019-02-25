@@ -1,9 +1,9 @@
 import {quantile, min, max} from 'd3-array'
 import {scaleLinear} from 'd3-scale'
 
-export function boxplot() {
-  const epsilon = 1e-6
+const epsilon = 1e-6
 
+export function boxplot() {
   let vertical = false
   let scale = scaleLinear()
   let bandwidth = 20
@@ -14,8 +14,18 @@ export function boxplot() {
   let key = undefined
 
   function boxplot(context) {
+    const x = vertical ? 'y' : 'x'
+    const y = vertical ? 'x' : 'y'
+    const w = vertical ? 'height' : 'width'
+    const h = vertical ? 'width' : 'height'
+    const coor = vertical ? (x, y) => [y, x] : (x, y) => [x, y]
+
     const selection = context.selection ? context.selection() : context
-    const rootTranslate = vertical ? [bandwidth * .5, 0] : [0, bandwidth * .5]
+    const rootTranslate = coor(0, bandwidth * .5)
+    const whiskerPath = d => {
+      const s = scale(d.start), e = scale(d.end), w = boxwidth
+      return `M${coor(s, -.5 * w)} L${coor(s, .5 * w)} M${coor(s, 0)} L${coor(e, 0)}`
+    }
 
     let gWhisker = selection.select('g.whisker')
     if (gWhisker.empty()) gWhisker = selection.append('g').attr('class', 'whisker')
@@ -42,10 +52,10 @@ export function boxplot() {
       .attr('fill', 'currentColor')
       .attr('stroke', 'none')
       .attr('opacity', epsilon)
-      .attr(vertical ? 'y' : 'x', (d, i) => scale(d.start) + (i === 0 ? 0 : .5))
-      .attr(vertical ? 'x' : 'y', -.5 * boxwidth)
-      .attr(vertical ? 'height' : 'width', (d, i) => scale(d.end) - scale(d.start) - (i === 0 ? .5 : 0))
-      .attr(vertical ? 'width' : 'height', boxwidth)
+      .attr(x, (d, i) => scale(d.start) + (i === 0 ? 0 : .5))
+      .attr(y, -.5 * boxwidth)
+      .attr(w, (d, i) => scale(d.end) - scale(d.start) - (i === 0 ? .5 : 0))
+      .attr(h, boxwidth)
       .merge(box)
 
     let point = gPoint.selectAll('circle').data(
@@ -58,8 +68,8 @@ export function boxplot() {
       .attr('stroke', 'none')
       .attr('opacity', epsilon)
       .attr('r', epsilon)
-      .attr(vertical ? 'cx' : 'cy', d => jitter ? (Math.random() - .5) * (d.farout ? 0 : d.outlier ? .5 : 1) * jitter * bandwidth : 0)
-      .attr(vertical ? 'cy' : 'cx', d => scale(d.value))
+      .attr(`c${x}`, d => scale(d.value))
+      .attr(`c${y}`, d => jitter ? (Math.random() - .5) * (d.farout ? 0 : d.outlier ? .5 : 1) * jitter * bandwidth : 0)
       .merge(point)
       .classed('outlier', d => d.outlier)
       .classed('farout', d => d.farout)
@@ -76,15 +86,15 @@ export function boxplot() {
       .attr('d', whiskerPath)
     box
       .attr('opacity', opacity)
-      .attr(vertical ? 'y' : 'x', (d, i) => scale(d.start) + (i === 0 ? 0 : .5))
-      .attr(vertical ? 'x' : 'y', -.5 * boxwidth)
-      .attr(vertical ? 'height' : 'width', (d, i) => scale(d.end) - scale(d.start) - (i === 0 ? .5 : 0))
-      .attr(vertical ? 'width' : 'height', boxwidth)
+      .attr(x, (d, i) => scale(d.start) + (i === 0 ? 0 : .5))
+      .attr(y, -.5 * boxwidth)
+      .attr(w, (d, i) => scale(d.end) - scale(d.start) - (i === 0 ? .5 : 0))
+      .attr(h, boxwidth)
     point
       .attr('opacity', opacity)
       .attr('r', d => d.farout ? bandwidth * .15 : bandwidth * .1)
-      .attr(vertical ? 'cx' : 'cy', d => jitter ? (Math.random() - .5) * (d.farout ? 0 : d.outlier ? .5 : 1) * jitter * bandwidth : 0)
-      .attr(vertical ? 'cy' : 'cx', d => scale(d.value))
+      .attr(`c${x}`, d => scale(d.value))
+      .attr(`c${y}`, d => jitter ? (Math.random() - .5) * (d.farout ? 0 : d.outlier ? .5 : 1) * jitter * bandwidth : 0)
     pointExit
       .attr('opacity', epsilon)
       .attr('r', epsilon)
@@ -101,13 +111,6 @@ export function boxplot() {
   boxplot.opacity = (..._) => _.length ? (opacity = _[0], boxplot) : opacity
   boxplot.jitter = (..._) => _.length ? (jitter = _[0], boxplot) : jitter
   boxplot.key = (..._) => _.length ? (key = _[0], boxplot) : key
-
-  function whiskerPath(d) {
-    const s = scale(d.start), e = scale(d.end), w = boxwidth
-    return vertical ?
-      `M${[-.5 * w, s]} L${[.5 * w, s]} M${[0, s]} L${[0, e]}` :
-      `M${[s, -.5 * w]} L${[s, .5 * w]} M${[s, 0]} L${[e, 0]}`
-  }
 
   return boxplot
 }
@@ -138,13 +141,5 @@ export function boxplotStats(data, valueof) {
     outlier: d < fences[1].start || fences[3].end < d,
     farout: d < fences[0].start || fences[4].end < d,
   }))
-  return {
-    fiveNums,
-    iqr,
-    step,
-    fences,
-    boxes,
-    whiskers,
-    points,
-  }
+  return {fiveNums, iqr, step, fences, boxes, whiskers, points}
 }
