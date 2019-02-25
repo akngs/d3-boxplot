@@ -22,6 +22,7 @@ export function boxplot() {
 
     const selection = context.selection ? context.selection() : context
     const whiskerPath = d => `M${coor(scale(d.start), -.5 * boxwidth)} l${coor(0, boxwidth)} m${coor(0, -.5 * boxwidth)} L${coor(scale(d.end), 0)}`
+    const jitterer = (d, i) => jitter ? Math.sin(1e5 * (i + d.value)) * .5 * (d.farout ? 0 : d.outlier ? .5 : 1) * jitter * bandwidth : 0
 
     let gWhisker = selection.select('g.whisker')
     if (gWhisker.empty()) gWhisker = selection.append('g')
@@ -68,7 +69,7 @@ export function boxplot() {
       .attr('opacity', epsilon)
       .attr('r', epsilon)
       .attr(`c${x}`, d => scale(d.value))
-      .attr(`c${y}`, d => jitter ? (Math.random() - .5) * (d.farout ? 0 : d.outlier ? .5 : 1) * jitter * bandwidth : 0)
+      .attr(`c${y}`, jitterer)
       .merge(point)
       .classed('outlier', d => d.outlier)
       .classed('farout', d => d.farout)
@@ -102,7 +103,7 @@ export function boxplot() {
       .attr('opacity', opacity)
       .attr('r', d => d.farout ? bandwidth * .15 : bandwidth * .1)
       .attr(`c${x}`, d => scale(d.value))
-      .attr(`c${y}`, d => jitter ? (Math.random() - .5) * (d.farout ? 0 : d.outlier ? .5 : 1) * jitter * bandwidth : 0)
+      .attr(`c${y}`, jitterer)
     pointExit
       .attr('opacity', epsilon)
       .attr('r', epsilon)
