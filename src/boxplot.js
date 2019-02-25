@@ -11,6 +11,7 @@ export function boxplot() {
   let showInnerDots = true
   let opacity = .8
   let jitter = .2
+  let key = undefined
 
   function boxplot(context) {
     const selection = context.selection ? context.selection() : context
@@ -47,7 +48,7 @@ export function boxplot() {
       .attr(vertical ? 'width' : 'height', boxwidth)
       .merge(box)
 
-    let point = gPoint.selectAll('circle').data(d => showInnerDots ? d.points : d.points.filter(d2 => d2.outlier))
+    let point = gPoint.selectAll('circle').data(d => showInnerDots ? d.points : d.points.filter(d2 => d2.outlier), d => key(d.datum))
     let pointExit = point.exit()
     point = point.enter().append('circle')
       .attr('fill', 'currentColor')
@@ -96,6 +97,7 @@ export function boxplot() {
   boxplot.boxwidth = (..._) => _.length ? (boxwidth = _[0], boxplot) : boxwidth
   boxplot.opacity = (..._) => _.length ? (opacity = _[0], boxplot) : opacity
   boxplot.jitter = (..._) => _.length ? (jitter = _[0], boxplot) : jitter
+  boxplot.key = (..._) => _.length ? (key = _[0], boxplot) : key
 
   function whiskerPath(d) {
     const s = scale(d.start), e = scale(d.end), w = boxwidth

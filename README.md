@@ -107,3 +107,8 @@ the box.
 
 Sets or returns *jitter*ing value. Actual value used is *bandwidth * jitter*. Set the value `0.0`
 to disable jittering. The default value is `0.5`.
+
+<a href="#boxplot_key" name="boxplot_key">#</a> boxplot.<b>key</b>([*key*])
+
+Sets or returns *key* function for [object constancy](https://bost.ocks.org/mike/constancy/). The
+default value is `undefined`.

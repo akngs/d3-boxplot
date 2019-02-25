@@ -1,6 +1,6 @@
 {
   "name": "d3-boxplot",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "d3js plugin for box-and-whisker plot",
   "keywords": [
     "d3",

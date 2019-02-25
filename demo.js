@@ -14,6 +14,7 @@ function render(data, svg, w, h, transition) {
     .bandwidth(axis2.bandwidth())
     .vertical(vertical)
     .jitter(0.2)
+    .key(d => d.key)
 
   let root = d3.select(svg)
     .attr('width', w)
@@ -32,10 +33,12 @@ function render(data, svg, w, h, transition) {
 
 function update() {
   let rand = d3.randomNormal()
-  let data = []
+  let keys = d3.shuffle('ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split(''))
+  let data =[]
+
   for (let i = 0; i < 6; i++) {
-    data.push(d3.range(Math.random() * 10 + 20 | 0)
-      .map(() => ({x: rand(), y: rand()}))
+    data.push(d3.range(20)
+      .map(i => ({key: keys[i], x: rand(), y: rand()}))
       .sort((a, b) => d3.ascending(a.x, b.x))
     )
   }
