@@ -3,9 +3,12 @@
   "version": "0.6.3",
   "description": "d3js plugin for box-and-whisker plot",
   "keywords": [
+    "boxplot",
     "d3",
     "d3-module",
-    "boxplot"
+    "visualization",
+    "statistics",
+    "svg"
   ],
   "license": "BSD-3-Clause",
   "main": "build/d3-boxplot.js",
