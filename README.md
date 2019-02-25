@@ -18,13 +18,13 @@ Here's a minimal code snippet:
 <script src="d3-boxplot.js"></script>
 
 <script>
-var data = [1, 2, 3, 4, 5];
-var stats = d3.boxplotStats(data);
-var x = d3.scaleLinear()
+let data = [1, 2, 3, 4, 5]
+let stats = d3.boxplotStats(data)
+let x = d3.scaleLinear()
   .domain(d3.extent(data))
-  .range([0, 300]);
-var plot = d3.boxplot().scale(x);
-d3.select('svg').datum(stats).call(plot);
+  .range([0, 300])
+let plot = d3.boxplot().scale(x)
+d3.select('svg').datum(stats).call(plot)
 </script>
 ```
 
@@ -47,11 +47,11 @@ If you have multiple batches of data, you may use `Array.map()` to turn them int
 statistics:
 
 ```javascript
-var batches = [
+let batches = [
   [1,2,3,4,5],
   [6,7,8,9,10]
-];
-var stats = batches.map(function(b) {return d3.boxplotStats(b);});
+]
+let stats = batches.map(function(b) {return d3.boxplotStats(b)})
 ```
 
 Now you can draw small-multiples of box plots using conventional d3 code:
@@ -59,7 +59,7 @@ Now you can draw small-multiples of box plots using conventional d3 code:
 ```javascript
 d3.select('svg').selectAll('g.plot').data(stats)
   .join('g')
-  .attr('transform', function(d, i) {return 'translate(...)';})
+  .attr('transform', function(d, i) {return 'translate(...)'})
   .call(d3.boxplot())
 ```
 

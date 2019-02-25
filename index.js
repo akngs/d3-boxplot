@@ -1,4 +1,4 @@
 export {
-    boxplot,
-    boxplotStats
-} from "./src/boxplot";
+  boxplot,
+  boxplotStats
+} from "./src/boxplot"
