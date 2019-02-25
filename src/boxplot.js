@@ -48,7 +48,10 @@ export function boxplot() {
       .attr(vertical ? 'width' : 'height', boxwidth)
       .merge(box)
 
-    let point = gPoint.selectAll('circle').data(d => showInnerDots ? d.points : d.points.filter(d2 => d2.outlier), d => key(d.datum))
+    let point = gPoint.selectAll('circle').data(
+      d => showInnerDots ? d.points : d.points.filter(d2 => d2.outlier),
+      key ? (d => key(d.datum)) : undefined
+    )
     let pointExit = point.exit()
     point = point.enter().append('circle')
       .attr('fill', 'currentColor')
