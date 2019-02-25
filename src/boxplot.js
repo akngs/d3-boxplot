@@ -17,20 +17,21 @@ export function boxplot() {
 
     function boxplot(context) {
         var selection = context.selection ? context.selection() : context;
+        var rootTranslate = vertical ? [bandwidth * .5, 0] : [0, bandwidth * .5];
 
-        var whiskerGroup = selection.select('g.whisker');
-        if (whiskerGroup.empty()) whiskerGroup = selection.append('g').attr('class', 'whisker');
-        whiskerGroup.attr('transform', 'translate(' + (vertical ? [bandwidth * 0.5, 0] : [0, bandwidth * 0.5]) + ')');
+        var gWhisker = selection.select('g.whisker');
+        if (gWhisker.empty()) gWhisker = selection.append('g').attr('class', 'whisker');
+        gWhisker.attr('transform', 'translate(' + rootTranslate + ')');
 
-        var boxGroup = selection.select('g.box');
-        if (boxGroup.empty()) boxGroup = selection.append('g').attr('class', 'box');
-        boxGroup.attr('transform', 'translate(' + (vertical ? [bandwidth * 0.5, 0] : [0, bandwidth * 0.5]) + ')');
+        var gBox = selection.select('g.box');
+        if (gBox.empty()) gBox = selection.append('g').attr('class', 'box');
+        gBox.attr('transform', 'translate(' + rootTranslate + ')');
 
-        var pointGroup = selection.select('g.point');
-        if (pointGroup.empty()) pointGroup = selection.append('g').attr('class', 'point');
-        pointGroup.attr('transform', 'translate(' + (vertical ? [bandwidth * 0.5, 0] : [0, bandwidth * 0.5]) + ')');
+        var gPoint = selection.select('g.point');
+        if (gPoint.empty()) gPoint = selection.append('g').attr('class', 'point');
+        gPoint.attr('transform', 'translate(' + rootTranslate + ')');
 
-        var whisker = whiskerGroup.selectAll('path').data(function (d) {
+        var whisker = gWhisker.selectAll('path').data(function (d) {
             return d.whiskers;
         });
         var whiskerEnter = whisker.enter()
@@ -42,7 +43,7 @@ export function boxplot() {
             .attr('d', whiskerPath);
         whisker = whisker.merge(whiskerEnter);
 
-        var box = boxGroup.selectAll('rect').data(function (d) {
+        var box = gBox.selectAll('rect').data(function (d) {
             return d.boxes;
         });
         var boxEnter = box.enter()
@@ -50,16 +51,16 @@ export function boxplot() {
             .attr('fill', 'currentColor')
             .attr('stroke', 'none')
             .attr(vertical ? 'y' : 'x', function (d, i) {
-                return scale(d.start) + (i === 0 ? 0 : 0.5);
+                return scale(d.start) + (i === 0 ? 0 : .5);
             })
             .attr(vertical ? 'x' : 'y', -.5 * boxwidth)
             .attr(vertical ? 'height' : 'width', function (d, i) {
-                return scale(d.end) - scale(d.start) - (i === 0 ? 0.5 : 0);
+                return scale(d.end) - scale(d.start) - (i === 0 ? .5 : 0);
             })
             .attr(vertical ? 'width' : 'height', boxwidth);
         box = box.merge(boxEnter);
 
-        var point = pointGroup.selectAll('circle.point').data(function (d) {
+        var point = gPoint.selectAll('circle.point').data(function (d) {
             return showInnerDots ? d.points : d.points.filter(function (d) {
                 return d.outlier;
             });
@@ -77,7 +78,7 @@ export function boxplot() {
             .attr(vertical ? 'cx' : 'cy', function (d) {
                 return jitter === 0 ?
                     0 :
-                    (Math.random() - 0.5) * (d.farout ? 0.0 : d.outlier ? 0.5 : 1.0) * jitter * bandwidth;
+                    (Math.random() - .5) * (d.farout ? 0 : d.outlier ? .5 : 1) * jitter * bandwidth;
             })
             .attr(vertical ? 'cy' : 'cx', function (d) {
                 return scale(d.value);
@@ -108,11 +109,11 @@ export function boxplot() {
 
         box
             .attr(vertical ? 'y' : 'x', function (d, i) {
-                return scale(d.start) + (i === 0 ? 0 : 0.5);
+                return scale(d.start) + (i === 0 ? 0 : .5);
             })
             .attr(vertical ? 'x' : 'y', -.5 * boxwidth)
             .attr(vertical ? 'height' : 'width', function (d, i) {
-                return scale(d.end) - scale(d.start) - (i === 0 ? 0.5 : 0);
+                return scale(d.end) - scale(d.start) - (i === 0 ? .5 : 0);
             })
             .attr(vertical ? 'width' : 'height', boxwidth)
             .attr('opacity', opacity);
