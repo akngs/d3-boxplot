@@ -1,8 +1,8 @@
-let tape = require("tape"),
-  boxplot = require("../")
+const tape = require("tape")
+const boxplot = require("../")
 
 tape("Single data point", test => {
-  let stats = boxplot.boxplotStats([5])
+  const stats = boxplot.boxplotStats([5])
   test.deepEqual(stats, {
     fiveNums: [5, 5, 5, 5, 5],
     iqr: 0,
@@ -28,7 +28,7 @@ tape("Single data point", test => {
 })
 
 tape("Simple and obvious data", test => {
-  let stats = boxplot.boxplotStats([1, 2, 3, 4, 5])
+  const stats = boxplot.boxplotStats([1, 2, 3, 4, 5])
   test.deepEqual(stats, {
     fiveNums: [1, 2, 3, 4, 5],
     iqr: 2,
@@ -60,14 +60,14 @@ tape("Simple and obvious data", test => {
 })
 
 tape("Accessor", test => {
-  let data = [
+  const data = [
     {x: 1, y: 2},
     {x: 2, y: 3},
     {x: 3, y: 4},
     {x: 4, y: 5},
     {x: 5, y: 6},
   ]
-  let xStats = boxplot.boxplotStats(data, d => d.x)
+  const xStats = boxplot.boxplotStats(data, d => d.x)
   test.deepEqual(xStats, {
     fiveNums: [1, 2, 3, 4, 5],
     iqr: 2,
@@ -99,8 +99,8 @@ tape("Accessor", test => {
 })
 
 tape("Boxplot statistics from well-known numbers", test => {
-  let data = [0, 3, 4.4, 4.5, 4.6, 5, 7]
-  let stats = boxplot.boxplotStats(data)
+  const data = [0, 3, 4.4, 4.5, 4.6, 5, 7]
+  const stats = boxplot.boxplotStats(data)
 
   test.deepEqual(
     stats.fiveNums,
