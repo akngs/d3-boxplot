@@ -18,17 +18,24 @@
     "type": "git",
     "url": "https://github.com/akngs/d3-boxplot.git"
   },
+  "watch": {
+    "test": {
+      "patterns": "{src,test}/**/*.js",
+      "quite": true
+    }
+  },
   "scripts": {
     "pretest": "rm -rf build && mkdir build && rollup -f umd -g d3-array:d3,d3-scale:d3 -n d3 -o build/d3-boxplot.js -- index.js",
-    "test": "tape-watch -1 'src/*/*.js' 'test/**/*-test.js'",
+    "test": "tape 'test/**/*-test.js'",
+    "watch": "npm-watch",
     "prepublish": "npm run test && uglifyjs build/d3-boxplot.js -c -m -o build/d3-boxplot.min.js",
     "postpublish": "zip -j build/d3-boxplot.zip -- LICENSE README.md build/d3-boxplot.js build/d3-boxplot.min.js"
   },
   "devDependencies": {
     "jsdom": "^13.2.0",
+    "npm-watch": "^0.6.0",
     "rollup": "0.27.1",
     "tape": "4",
-    "tape-watch": "^2.3.0",
     "uglify-es": "^3.3.9"
   },
   "dependencies": {
