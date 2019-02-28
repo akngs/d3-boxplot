@@ -53,7 +53,7 @@ export function boxplot() {
       .attr('opacity', 0)
       .attr(x, (d, i) => scale(d.start) + (i === 0 ? 0 : .5))
       .attr(y, -.5 * boxwidth)
-      .attr(w, (d, i) => scale(d.end) - scale(d.start) - (i === 0 ? .5 : 0))
+      .attr(w, d => scale(d.end) - scale(d.start) - .5)
       .attr(h, boxwidth)
       .merge(box)
 
@@ -96,7 +96,7 @@ export function boxplot() {
       .attr('opacity', opacity)
       .attr(x, (d, i) => scale(d.start) + (i === 0 ? 0 : .5))
       .attr(y, -.5 * boxwidth)
-      .attr(w, (d, i) => scale(d.end) - scale(d.start) - (i === 0 ? .5 : 0))
+      .attr(w, d => scale(d.end) - scale(d.start) - .5)
       .attr(h, boxwidth)
     point
       .attr('opacity', opacity)
