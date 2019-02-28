@@ -99,5 +99,29 @@ tape("Accessor", test => {
 })
 
 tape("Boxplot statistics from well-known numbers", test => {
-  let data = [1, 3, 3.4, 3.5, 3.6, 5, 6]
+  let data = [0, 3, 4.4, 4.5, 4.6, 5, 7]
+  let stats = boxplot.boxplotStats(data)
+
+  test.deepEqual(
+    stats.fiveNums,
+    [0, 3.7, 4.5, 4.8, 7]
+  )
+  test.deepEqual(
+    stats.boxes,
+    [{start: 3.7, end: 4.5}, {start: 4.5, end: 4.8}]
+  )
+  test.deepEqual(
+    stats.whiskers,
+    [{start: 3, end: 3.7}, {start: 5, end: 4.8}]
+  )
+  test.deepEqual(
+    stats.points.map(p => p.outlier),
+    [true, false, false, false, false, false, true]
+  )
+  test.deepEqual(
+    stats.points.map(p => p.farout),
+    [true, false, false, false, false, false, false]
+  )
+
+  test.end()
 })
