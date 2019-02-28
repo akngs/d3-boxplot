@@ -41,10 +41,14 @@ tape("Boxes", test => {
   const boxes = root.querySelectorAll('g.box > rect')
 
   test.equal(boxes.length, 2)
-  test.equal(boxes[0].getAttribute('x'), '25')
-  test.equal(boxes[0].getAttribute('width'), '24.5')
-  test.equal(boxes[1].getAttribute('x'), '50.5')
-  test.equal(boxes[1].getAttribute('width'), '24.5')
+  test.equal(+boxes[0].getAttribute('x'), 25)
+  test.equal(+boxes[0].getAttribute('y'), -10)
+  test.equal(+boxes[0].getAttribute('width'), 24.5)
+  test.equal(+boxes[0].getAttribute('height'), 20)
+  test.equal(+boxes[1].getAttribute('x'), 50.5)
+  test.equal(+boxes[1].getAttribute('y'), -10)
+  test.equal(+boxes[1].getAttribute('width'), 24.5)
+  test.equal(+boxes[1].getAttribute('height'), 20)
   test.end()
 })
 
