@@ -23,8 +23,8 @@ const stats = {
     {start: 5, end: 4},
   ],
   points: [
-    {value: 1, datum: 1, outlier: false, farout: false},
-    {value: 2, datum: 2, outlier: false, farout: false},
+    {value: 1, datum: 1, outlier: true, farout: true},
+    {value: 2, datum: 2, outlier: true, farout: false},
     {value: 3, datum: 3, outlier: false, farout: false},
     {value: 4, datum: 4, outlier: false, farout: false},
     {value: 5, datum: 5, outlier: false, farout: false},
@@ -61,6 +61,35 @@ tape("Whiskers", test => {
   test.equal(paths.length, 2)
   test.equal(paths[0].getAttribute('d'), 'M0,-10 l0,20 m0,-10 L25,0')
   test.equal(paths[1].getAttribute('d'), 'M100,-10 l0,20 m0,-10 L75,0')
+  test.end()
+})
+
+tape("Points", test => {
+  const plot = boxplot.boxplot()
+    .scale(scale)
+  const root = render(body(), stats, plot)
+  const points = root.querySelectorAll('g.point > circle')
+
+  test.equal(points.length, 5)
+  test.equal(+points[0].getAttribute('cx'), 0)
+  test.equal(points[0].classList.contains('outlier'), true)
+  test.equal(points[0].classList.contains('farout'), true)
+
+  test.equal(+points[1].getAttribute('cx'), 25)
+  test.equal(points[1].classList.contains('outlier'), true)
+  test.equal(points[1].classList.contains('farout'), false)
+
+  test.equal(+points[2].getAttribute('cx'), 50)
+  test.equal(points[2].classList.contains('outlier'), false)
+  test.equal(points[2].classList.contains('farout'), false)
+
+  test.equal(+points[3].getAttribute('cx'), 75)
+  test.equal(points[3].classList.contains('outlier'), false)
+  test.equal(points[3].classList.contains('farout'), false)
+
+  test.equal(+points[4].getAttribute('cx'), 100)
+  test.equal(points[4].classList.contains('outlier'), false)
+  test.equal(points[4].classList.contains('farout'), false)
   test.end()
 })
 

@@ -122,6 +122,5 @@ tape("Boxplot statistics from well-known numbers", test => {
     stats.points.map(p => p.farout),
     [true, false, false, false, false, false, false]
   )
-
   test.end()
 })
