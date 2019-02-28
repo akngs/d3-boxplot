@@ -1,7 +1,7 @@
 let tape = require("tape"),
   boxplot = require("../")
 
-tape("Statistics for single data point", test => {
+tape("Single data point", test => {
   let stats = boxplot.boxplotStats([5])
   test.deepEqual(stats, {
     fiveNums: [5, 5, 5, 5, 5],
@@ -27,7 +27,7 @@ tape("Statistics for single data point", test => {
   test.end()
 })
 
-tape("Statistics", test => {
+tape("Simple and obvious data", test => {
   let stats = boxplot.boxplotStats([1, 2, 3, 4, 5])
   test.deepEqual(stats, {
     fiveNums: [1, 2, 3, 4, 5],
@@ -59,7 +59,7 @@ tape("Statistics", test => {
   test.end()
 })
 
-tape("Statistics with accessor", test => {
+tape("Accessor", test => {
   let data = [
     {x: 1, y: 2},
     {x: 2, y: 3},
@@ -96,4 +96,8 @@ tape("Statistics with accessor", test => {
     ],
   })
   test.end()
+})
+
+tape("Boxplot statistics from well-known numbers", test => {
+  let data = [1, 3, 3.4, 3.5, 3.6, 5, 6]
 })

@@ -20,7 +20,7 @@ export function boxplot() {
 
     const selection = context.selection ? context.selection() : context
     const whiskerPath = d => `M${coor(scale(d.start), -.5 * boxwidth)} l${coor(0, boxwidth)} m${coor(0, -.5 * boxwidth)} L${coor(scale(d.end), 0)}`
-    const jitterer = (d, i) => jitter ? Math.sin(1e5 * (i + d.value)) * .5 * (d.farout ? 0 : d.outlier ? .5 : 1) * jitter * bandwidth : 0
+    const jitterer = jitter === 0 ? 0 : (d, i) => Math.sin(1e5 * (i + d.value)) * .5 * (d.farout ? 0 : d.outlier ? .5 : 1) * jitter * bandwidth
     const r = Math.max(1.5, Math.sqrt(bandwidth) * .5)
 
     let gWhisker = selection.select('g.whisker')
