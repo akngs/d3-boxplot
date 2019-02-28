@@ -32,6 +32,7 @@
     "postpublish": "zip -j build/d3-boxplot.zip -- LICENSE README.md build/d3-boxplot.js build/d3-boxplot.min.js"
   },
   "devDependencies": {
+    "d3": "^5.9.1",
     "jsdom": "^13.2.0",
     "npm-watch": "^0.6.0",
     "rollup": "0.27.1",
