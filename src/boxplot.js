@@ -1,8 +1,6 @@
 import {quantile, min, max} from 'd3-array'
 import {scaleLinear} from 'd3-scale'
 
-const epsilon = 1e-6
-
 export function boxplot() {
   let vertical = false
   let scale = scaleLinear()
@@ -44,7 +42,7 @@ export function boxplot() {
     whisker = whisker.enter().append('path')
       .attr('fill', 'none')
       .attr('stroke', 'currentColor')
-      .attr('opacity', epsilon)
+      .attr('opacity', 0)
       .attr('d', whiskerPath)
       .merge(whisker)
 
@@ -52,7 +50,7 @@ export function boxplot() {
     box = box.enter().append('rect')
       .attr('fill', 'currentColor')
       .attr('stroke', 'none')
-      .attr('opacity', epsilon)
+      .attr('opacity', 0)
       .attr(x, (d, i) => scale(d.start) + (i === 0 ? 0 : .5))
       .attr(y, -.5 * boxwidth)
       .attr(w, (d, i) => scale(d.end) - scale(d.start) - (i === 0 ? .5 : 0))
@@ -67,8 +65,8 @@ export function boxplot() {
     point = point.enter().append('circle')
       .attr('fill', 'currentColor')
       .attr('stroke', 'none')
-      .attr('opacity', epsilon)
-      .attr('r', epsilon)
+      .attr('opacity', 0)
+      .attr('r', 0)
       .attr(`c${x}`, d => scale(d.value))
       .attr(`c${y}`, jitterer)
       .merge(point)
@@ -106,8 +104,8 @@ export function boxplot() {
       .attr(`c${x}`, d => scale(d.value))
       .attr(`c${y}`, jitterer)
     pointExit
-      .attr('opacity', epsilon)
-      .attr('r', epsilon)
+      .attr('opacity', 0)
+      .attr('r', 0)
       .remove()
 
     return this
