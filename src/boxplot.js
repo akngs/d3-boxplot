@@ -19,8 +19,14 @@ export function boxplot() {
     const coor = vertical ? (x, y) => [y, x] : (x, y) => [x, y]
 
     const selection = context.selection ? context.selection() : context
-    const whiskerPath = d => `M${coor(scale(d.start), -.5 * boxwidth)} l${coor(0, boxwidth)} m${coor(0, -.5 * boxwidth)} L${coor(scale(d.end), 0)}`
-    const jitterer = jitter === 0 ? 0 : (d, i) => Math.sin(1e5 * (i + d.value)) * .5 * (d.farout ? 0 : d.outlier ? .5 : 1) * jitter * bandwidth
+    const whiskerPath = d =>
+      `M${coor(scale(d.start), -.5 * boxwidth)} l${coor(0, boxwidth)} ` +
+      `m${coor(0, -.5 * boxwidth)} L${coor(scale(d.end), 0)}`
+    const jitterer = jitter === 0 ? 0 : (d, i) =>
+      // 1. determinisic pseudo random noise
+      Math.sin(1e5 * (i + d.value)) * .5 *
+      // 2. scale
+      (d.farout ? 0 : d.outlier ? .5 : 1) * jitter * bandwidth
     const r = Math.max(1.5, Math.sqrt(bandwidth) * .5)
 
     let gWhisker = selection.select('g.whisker')
