@@ -28,12 +28,13 @@
     "watch": "npm-watch",
     "build": "rm -rf build && mkdir build && rollup -f umd -g d3-array:d3,d3-scale:d3 -n d3 -o build/d3-boxplot.js -- index.js",
     "minify": "uglifyjs build/d3-boxplot.js -c -m -o build/d3-boxplot.min.js",
-    "test": "npm run build && tape 'test/**/*-test.js' | npx faucet",
+    "test": "eslint src && npm run build && tape 'test/**/*-test.js' | faucet",
     "prepublish": "npm run test && npm run minify",
     "postpublish": "zip -j build/d3-boxplot.zip -- LICENSE README.md build/d3-boxplot.js build/d3-boxplot.min.js"
   },
   "devDependencies": {
     "d3": "^5.9.1",
+    "eslint": "5",
     "faucet": "0.0.1",
     "jsdom": "^13.2.0",
     "npm-watch": "^0.6.0",
