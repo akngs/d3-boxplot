@@ -2,7 +2,7 @@
 
 d3js plugin for box-and-whisker plot.
 
-![d3-boxplot](d3-boxplot.png)
+![d3-boxplot](img/d3-boxplot.png)
 
 ## Installing
 
@@ -66,7 +66,7 @@ d3.select('svg').selectAll('g.plot').data(stats)
 Box plot statistics are also useful to render additional annotations on top of a box plot, like
 this:
 
-![Annotated box plot](d3-boxplot-annotated.png)
+![Annotated box plot](img/d3-boxplot-annotated.png)
 
 Visit [Box plot explained](https://beta.observablehq.com/@akngs/box-plot-explained) to see the code.
 
@@ -90,7 +90,7 @@ Sets or returns *boxwidth*. Boxwidth is a pixel value specifying a thickness of 
 default value is `20`. By setting this value to 3 and hide inner dots by call
 `showInnerDots(false)`, you can render minimalistic box plots mimic Edward Tufte's style:
 
-![Minimalistic box plot](d3-boxplot-minimalStyle.png)
+![Minimalistic box plot](img/d3-boxplot-minimalStyle.png)
 
 <a href="#boxplot_showInnerDots" name="boxplot_showInnerDots">#</a> boxplot.<b>showInnerDots</b>([*flag*])
 

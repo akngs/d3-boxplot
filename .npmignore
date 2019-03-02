@@ -1,5 +1,4 @@
 build/*.zip
 test/
-*.png
-*.html
-
+img/
+demo.*
