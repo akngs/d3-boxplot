@@ -56,8 +56,8 @@ export function boxplot() {
           .attr('opacity', opacity)
           .attr(`${x}1`, d => scale(d.value))
           .attr(`${x}2`, d => scale(d.value))
-          .attr(`${y}1`, boxwidth * -.25)
-          .attr(`${y}2`, boxwidth * .25)
+          .attr(`${y}1`, Math.min(-2, boxwidth * -.25))
+          .attr(`${y}2`, Math.max(2, boxwidth * .25))
       }
     ][symbol]
     const renderPointExit = [
