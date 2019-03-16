@@ -117,7 +117,8 @@ dots under the box.
 <a href="#boxplot_jitter" name="boxplot_jitter">#</a> boxplot.<b>jitter</b>([*jitter*])
 
 Sets or returns *jitter*ing value. Actual value used is *bandwidth * jitter*. Set the value `0.0`
-to disable jittering. The default value is `0.5`.
+to disable jittering. The default value is `0.5`. Please note that the jittering only works with
+`symbol(boxplotSymbolTick)`.
 
 <a href="#boxplot_key" name="boxplot_key">#</a> boxplot.<b>key</b>([*key*])
 
