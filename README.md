@@ -97,7 +97,7 @@ default value is `20`. By setting this value to 3 and hide inner dots by call
 Sets or returns *showInnerDots flag*. Set it `true` to show all data dots, or `false` to show
 only outliers (and far-outs). The default value is `true`.
 
-<a href="#boxplot_symbol" name="boxplot_symbol">#</a> boxplot.<b>symbol</b>([*flag*])
+<a href="#boxplot_symbol" name="boxplot_symbol">#</a> boxplot.<b>symbol</b>([*symbol*])
 
 Sets or returns *symbol*. The default value is `boxplotSymbolDot`. The following list shows possible
 options:
