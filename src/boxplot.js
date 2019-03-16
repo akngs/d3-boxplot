@@ -121,12 +121,13 @@ export function boxplot() {
       .attr(h, boxwidth)
       .merge(box)
 
-    let point = gPoint.selectAll(pointNodeName).data(
+    let point = gPoint.selectAll('.point').data(
       d => showInnerDots ? d.points : d.points.filter(d2 => d2.outlier),
       key ? (d => key(d.datum)) : undefined
     )
     let pointExit = point.exit()
     point = point.enter().append(pointNodeName)
+      .attr('class', 'point')
       .call(renderPointEnter)
       .merge(point)
       .classed('outlier', d => d.outlier)
