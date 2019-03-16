@@ -13,6 +13,7 @@ function render(data, svg, w, h, transition) {
     .scale(axis1)
     .bandwidth(axis2.bandwidth())
     .vertical(vertical)
+    .symbol(Math.random() > .5 ? d3.boxplotSymbolDot : d3.boxplotSymbolTick)
     .jitter(0.2)
     .key(d => d.key)
 

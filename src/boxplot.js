@@ -121,6 +121,9 @@ export function boxplot() {
       .attr(h, boxwidth)
       .merge(box)
 
+    // Remove old symbols
+    gPoint.selectAll('.point').filter(function() {return this.nodeName !== pointNodeName}).remove()
+
     let point = gPoint.selectAll('.point').data(
       d => showInnerDots ? d.points : d.points.filter(d2 => d2.outlier),
       key ? (d => key(d.datum)) : undefined
