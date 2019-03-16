@@ -1,6 +1,6 @@
 {
   "name": "d3-boxplot",
-  "version": "0.6.4",
+  "version": "0.7.0",
   "description": "d3js plugin for box-and-whisker plot",
   "keywords": [
     "boxplot",
@@ -38,7 +38,7 @@
     "faucet": "0.0.1",
     "jsdom": "13",
     "npm-watch": "^0.6.0",
-    "rollup": "0.67",
+    "rollup": "0.27.1",
     "tape": "4",
     "uglify-es": "3"
   },

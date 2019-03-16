@@ -1,4 +1,4 @@
-import {quantile, min, max} from 'd3-array'
+import {max, min, quantile} from 'd3-array'
 import {scaleLinear} from 'd3-scale'
 
 export function boxplot() {
@@ -7,6 +7,7 @@ export function boxplot() {
   let bandwidth = 20
   let boxwidth = 20
   let showInnerDots = true
+  let symbol = boxplotSymbolDot
   let opacity = .8
   let jitter = .2
   let key = undefined
@@ -17,6 +18,63 @@ export function boxplot() {
     const w = vertical ? 'height' : 'width'
     const h = vertical ? 'width' : 'height'
     const coor = vertical ? (x, y) => [y, x] : (x, y) => [x, y]
+    const pointNodeName = ['circle', 'line'][symbol]
+    const renderPointEnter = [
+      // boxplotSymbolDot
+      function (context) {
+        context
+          .attr('fill', 'currentColor')
+          .attr('stroke', 'none')
+          .attr('opacity', 0)
+          .attr('r', 0)
+          .attr(`c${x}`, d => scale(d.value))
+          .attr(`c${y}`, jitterer)
+      },
+      // boxplotSymbolTick
+      function (context) {
+        context
+          .attr('stroke', 'currentColor')
+          .attr('opacity', 0)
+          .attr(`${x}1`, d => scale(d.value))
+          .attr(`${x}2`, d => scale(d.value))
+          .attr(`${y}1`, 0)
+          .attr(`${y}2`, 0)
+      }
+    ][symbol]
+    const renderPointUpdate = [
+      // boxplotSymbolDot
+      function (context) {
+        context
+          .attr('opacity', opacity)
+          .attr('r', d => d.farout ? r * 1.5 : r)
+          .attr(`c${x}`, d => scale(d.value))
+          .attr(`c${y}`, jitterer)
+      },
+      // boxplotSymbolTick
+      function (context) {
+        context
+          .attr('opacity', opacity)
+          .attr(`${x}1`, d => scale(d.value))
+          .attr(`${x}2`, d => scale(d.value))
+          .attr(`${y}1`, boxwidth * -.25)
+          .attr(`${y}2`, boxwidth * .25)
+      }
+    ][symbol]
+    const renderPointExit = [
+      // boxplotSymbolDot
+      function (context) {
+        context
+          .attr('opacity', 0)
+          .attr('r', 0)
+      },
+      // boxplotSymbolTick
+      function (context) {
+        context
+          .attr('opacity', 0)
+          .attr(`${y}1`, 0)
+          .attr(`${y}2`, 0)
+      }
+    ][symbol]
 
     const selection = context.selection ? context.selection() : context
     const whiskerPath = d =>
@@ -63,18 +121,13 @@ export function boxplot() {
       .attr(h, boxwidth)
       .merge(box)
 
-    let point = gPoint.selectAll('circle').data(
+    let point = gPoint.selectAll(pointNodeName).data(
       d => showInnerDots ? d.points : d.points.filter(d2 => d2.outlier),
       key ? (d => key(d.datum)) : undefined
     )
     let pointExit = point.exit()
-    point = point.enter().append('circle')
-      .attr('fill', 'currentColor')
-      .attr('stroke', 'none')
-      .attr('opacity', 0)
-      .attr('r', 0)
-      .attr(`c${x}`, d => scale(d.value))
-      .attr(`c${y}`, jitterer)
+    point = point.enter().append(pointNodeName)
+      .call(renderPointEnter)
       .merge(point)
       .classed('outlier', d => d.outlier)
       .classed('farout', d => d.farout)
@@ -105,13 +158,9 @@ export function boxplot() {
       .attr(w, d => scale(d.end) - scale(d.start) - .5)
       .attr(h, boxwidth)
     point
-      .attr('opacity', opacity)
-      .attr('r', d => d.farout ? r * 1.5 : r)
-      .attr(`c${x}`, d => scale(d.value))
-      .attr(`c${y}`, jitterer)
+      .call(renderPointUpdate)
     pointExit
-      .attr('opacity', 0)
-      .attr('r', 0)
+      .call(renderPointExit)
       .remove()
 
     return this
@@ -122,6 +171,7 @@ export function boxplot() {
   boxplot.showInnerDots = (..._) => _.length ? (showInnerDots = _[0], boxplot) : showInnerDots
   boxplot.bandwidth = (..._) => _.length ? (bandwidth = _[0], boxplot) : bandwidth
   boxplot.boxwidth = (..._) => _.length ? (boxwidth = _[0], boxplot) : boxwidth
+  boxplot.symbol = (..._) => _.length ? (symbol = _[0], boxplot) : symbol
   boxplot.opacity = (..._) => _.length ? (opacity = _[0], boxplot) : opacity
   boxplot.jitter = (..._) => _.length ? (jitter = _[0], boxplot) : jitter
   boxplot.key = (..._) => _.length ? (key = _[0], boxplot) : key
@@ -157,3 +207,6 @@ export function boxplotStats(data, valueof) {
   }))
   return {fiveNums, iqr, step, fences, boxes, whiskers, points}
 }
+
+export const boxplotSymbolDot = 0
+export const boxplotSymbolTick = 1

@@ -93,6 +93,34 @@ tape("Points", test => {
   test.end()
 })
 
+tape("Symbol", test => {
+  const configs = [
+    {symbol: boxplot.boxplotSymbolDot, nodeName: 'circle'},
+    {symbol: boxplot.boxplotSymbolTick, nodeName: 'line'},
+  ]
+
+  configs.forEach(config => {
+    const plot = boxplot.boxplot()
+      .symbol(config.symbol)
+      .scale(scale)
+    const root = render(body(), stats, plot)
+    const points = root.querySelectorAll(`g.point > ${config.nodeName}`)
+    test.equal(points.length, 5)
+  })
+
+  test.end()
+})
+
+tape("Symbol: tick", test => {
+  const plot = boxplot.boxplot()
+    .symbol(boxplot.boxplotSymbolTick)
+    .scale(scale)
+  const root = render(body(), stats, plot)
+  const points = root.querySelectorAll('g.point > line')
+  test.equal(points.length, 5)
+  test.end()
+})
+
 function body() {
   const dom = new jsdom.JSDOM()
   return dom.window.document.body

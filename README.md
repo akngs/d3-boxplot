@@ -97,11 +97,22 @@ default value is `20`. By setting this value to 3 and hide inner dots by call
 Sets or returns *showInnerDots flag*. Set it `true` to show all data dots, or `false` to show
 only outliers (and far-outs). The default value is `true`.
 
+<a href="#boxplot_symbol" name="boxplot_symbol">#</a> boxplot.<b>symbol</b>([*flag*])
+
+Sets or returns *symbol*. The default value is `boxplotSymbolDot`. The following list shows possible
+options:
+
+* `boxplotSymbolDot`
+* `boxplotSymbolTick`
+
+`boxplotSymbolTick` renders thin lines instead of small circles:
+
+![Ticks](img/d3-boxplot-ticks.png)
+
 <a href="#boxplot_opacity" name="boxplot_opacity">#</a> boxplot.<b>opacity</b>([*opacity*])
 
-If *opacity* is specified, sets the opacity mode. If *opacity* is not specified, returns the
-current opacity. The default value is `0.8`. Partial transparency helps you to reveal dots under
-the box.
+Sets of returns *opacity*. The default value is `0.8`. Partial transparency helps you to reveal
+dots under the box.
 
 <a href="#boxplot_jitter" name="boxplot_jitter">#</a> boxplot.<b>jitter</b>([*jitter*])
 

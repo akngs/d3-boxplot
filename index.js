@@ -1,4 +1,6 @@
 export {
   boxplot,
-  boxplotStats
+  boxplotStats,
+  boxplotSymbolDot,
+  boxplotSymbolTick,
 } from "./src/boxplot"
