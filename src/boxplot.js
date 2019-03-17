@@ -17,6 +17,7 @@ export function boxplot() {
     const y = vertical ? 'x' : 'y'
     const h = vertical ? 'width' : 'height'
     const coor = vertical ? (x, y) => [y, x] : (x, y) => [x, y]
+    const inversed = scale.range()[0] > scale.range()[1]
     const pointNodeName = ['circle', 'line'][symbol]
     const renderPointEnter = [
       // boxplotSymbolDot
@@ -114,8 +115,8 @@ export function boxplot() {
       .attr('stroke', 'currentColor')
       .attr('stroke-width', boxwidth)
       .attr('opacity', 0)
-      .attr(`${x}1`, (d, i) => scale(d.start) + (i === 0 ? 0 : .5))
-      .attr(`${x}2`, (d, i) => scale(d.end) - (i === 0 ? .5 : 0))
+      .attr(`${x}1`, (d, i) => scale(d.start) + (i === 0 ? 0 : .5) * (inversed ? -1 : +1))
+      .attr(`${x}2`, (d, i) => scale(d.end) - (i === 0 ? .5 : 0) * (inversed ? -1 : +1))
       .attr(`${y}1`, 0)
       .attr(`${y}2`, 0)
       .attr(h, boxwidth)
@@ -158,8 +159,8 @@ export function boxplot() {
     box
       .attr('opacity', opacity)
       .attr('stroke-width', boxwidth)
-      .attr(`${x}1`, (d, i) => scale(d.start) + (i === 0 ? 0 : .5))
-      .attr(`${x}2`, (d, i) => scale(d.end) - (i === 0 ? .5 : 0))
+      .attr(`${x}1`, (d, i) => scale(d.start) + (i === 0 ? 0 : .5) * (inversed ? -1 : +1))
+      .attr(`${x}2`, (d, i) => scale(d.end) - (i === 0 ? .5 : 0) * (inversed ? -1 : +1))
       .attr(`${y}1`, 0)
       .attr(`${y}2`, 0)
     point

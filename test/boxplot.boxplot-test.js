@@ -48,6 +48,20 @@ tape("Boxes", test => {
   test.end()
 })
 
+tape("Boxes with inversed scale", test => {
+  const plot = boxplot.boxplot()
+    .scale(d3.scaleLinear().domain([1, 5]).range([100, 0]))
+  const root = render(body(), stats, plot)
+  const boxes = root.querySelectorAll('g.box > line')
+
+  test.equal(boxes.length, 2)
+  test.equal(+boxes[0].getAttribute('x1'), 75)
+  test.equal(+boxes[0].getAttribute('x2'), 50.5)
+  test.equal(+boxes[1].getAttribute('x1'), 49.5)
+  test.equal(+boxes[1].getAttribute('x2'), 25)
+  test.end()
+})
+
 tape("Whiskers", test => {
   const plot = boxplot.boxplot()
     .scale(scale)
