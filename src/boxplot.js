@@ -116,6 +116,8 @@ export function boxplot() {
       .attr('opacity', 0)
       .attr(`${x}1`, (d, i) => scale(d.start) + (i === 0 ? 0 : .5))
       .attr(`${x}2`, (d, i) => scale(d.end) - (i === 0 ? .5 : 0))
+      .attr(`${y}1`, 0)
+      .attr(`${y}2`, 0)
       .attr(h, boxwidth)
       .merge(box)
 
@@ -158,6 +160,8 @@ export function boxplot() {
       .attr('stroke-width', boxwidth)
       .attr(`${x}1`, (d, i) => scale(d.start) + (i === 0 ? 0 : .5))
       .attr(`${x}2`, (d, i) => scale(d.end) - (i === 0 ? .5 : 0))
+      .attr(`${y}1`, 0)
+      .attr(`${y}2`, 0)
     point
       .call(renderPointUpdate)
     pointExit
