@@ -15,7 +15,6 @@ export function boxplot() {
   function boxplot(context) {
     const x = vertical ? 'y' : 'x'
     const y = vertical ? 'x' : 'y'
-    const w = vertical ? 'height' : 'width'
     const h = vertical ? 'width' : 'height'
     const coor = vertical ? (x, y) => [y, x] : (x, y) => [x, y]
     const pointNodeName = ['circle', 'line'][symbol]
@@ -110,14 +109,13 @@ export function boxplot() {
       .attr('d', whiskerPath)
       .merge(whisker)
 
-    let box = gBox.selectAll('rect').data(d => d.boxes)
-    box = box.enter().append('rect')
-      .attr('fill', 'currentColor')
-      .attr('stroke', 'none')
+    let box = gBox.selectAll('line').data(d => d.boxes)
+    box = box.enter().append('line')
+      .attr('stroke', 'currentColor')
+      .attr('stroke-width', boxwidth)
       .attr('opacity', 0)
-      .attr(x, (d, i) => scale(d.start) + (i === 0 ? 0 : .5))
-      .attr(y, -.5 * boxwidth)
-      .attr(w, d => scale(d.end) - scale(d.start) - .5)
+      .attr(`${x}1`, (d, i) => scale(d.start) + (i === 0 ? 0 : .5))
+      .attr(`${x}2`, (d, i) => scale(d.end) - (i === 0 ? .5 : 0))
       .attr(h, boxwidth)
       .merge(box)
 
@@ -157,10 +155,9 @@ export function boxplot() {
       .attr('d', whiskerPath)
     box
       .attr('opacity', opacity)
-      .attr(x, (d, i) => scale(d.start) + (i === 0 ? 0 : .5))
-      .attr(y, -.5 * boxwidth)
-      .attr(w, d => scale(d.end) - scale(d.start) - .5)
-      .attr(h, boxwidth)
+      .attr('stroke-width', boxwidth)
+      .attr(`${x}1`, (d, i) => scale(d.start) + (i === 0 ? 0 : .5))
+      .attr(`${x}2`, (d, i) => scale(d.end) - (i === 0 ? .5 : 0))
     point
       .call(renderPointUpdate)
     pointExit

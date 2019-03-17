@@ -6,7 +6,7 @@ function render(data, svg, w, h, transition) {
     .range([10, vertical ? h - 10 : w - 10])
   let axis2 = d3.scaleBand()
     .domain(d3.range(stats.length))
-    .range([10, vertical ? w - 10 : h - 10])
+    .range([vertical ? w - 10 : h - 10, 10])
     .padding(0.15)
   let colors = d3.schemeCategory10
   let boxplot = d3.boxplot()
