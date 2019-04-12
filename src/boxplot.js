@@ -12,17 +12,18 @@ export function boxplot() {
   let jitter = .2
   let key = undefined
 
-  function boxplot(context) {
+  function boxplot(ctx) {
     const x = vertical ? 'y' : 'x'
     const y = vertical ? 'x' : 'y'
     const h = vertical ? 'width' : 'height'
     const coor = vertical ? (x, y) => [y, x] : (x, y) => [x, y]
     const inversed = scale.range()[0] > scale.range()[1]
-    const pointNodeName = ['circle', 'line'][symbol]
-    const renderPointEnter = [
-      // boxplotSymbolDot
-      function (context) {
-        context
+
+    const renderers = {}
+    renderers[boxplotSymbolDot] = {
+      nodeName: 'circle',
+      enter: function (ctx) {
+        ctx
           .attr('fill', 'currentColor')
           .attr('stroke', 'none')
           .attr('opacity', 0)
@@ -30,53 +31,48 @@ export function boxplot() {
           .attr(`c${x}`, d => scale(d.value))
           .attr(`c${y}`, jitterer)
       },
-      // boxplotSymbolTick
-      function (context) {
+      update: function (ctx) {
+        ctx
+          .attr('opacity', opacity)
+          .attr('r', d => d.farout ? r * 1.5 : r)
+          .attr(`c${x}`, d => scale(d.value))
+          .attr(`c${y}`, jitterer)
+      },
+      exit: function (context) {
         context
+          .attr('opacity', 0)
+          .attr('r', 0)
+      },
+    }
+    renderers[boxplotSymbolTick] = {
+      nodeName: 'line',
+      enter: function (ctx) {
+        ctx
           .attr('stroke', 'currentColor')
           .attr('opacity', 0)
           .attr(`${x}1`, d => scale(d.value))
           .attr(`${x}2`, d => scale(d.value))
           .attr(`${y}1`, 0)
           .attr(`${y}2`, 0)
-      }
-    ][symbol]
-    const renderPointUpdate = [
-      // boxplotSymbolDot
-      function (context) {
-        context
-          .attr('opacity', opacity)
-          .attr('r', d => d.farout ? r * 1.5 : r)
-          .attr(`c${x}`, d => scale(d.value))
-          .attr(`c${y}`, jitterer)
       },
-      // boxplotSymbolTick
-      function (context) {
-        context
+      update: function (ctx) {
+        ctx
           .attr('opacity', opacity)
           .attr(`${x}1`, d => scale(d.value))
           .attr(`${x}2`, d => scale(d.value))
           .attr(`${y}1`, Math.min(-2, boxwidth * -.25))
           .attr(`${y}2`, Math.max(2, boxwidth * .25))
-      }
-    ][symbol]
-    const renderPointExit = [
-      // boxplotSymbolDot
-      function (context) {
-        context
-          .attr('opacity', 0)
-          .attr('r', 0)
       },
-      // boxplotSymbolTick
-      function (context) {
-        context
+      exit: function (ctx) {
+        ctx
           .attr('opacity', 0)
           .attr(`${y}1`, 0)
           .attr(`${y}2`, 0)
-      }
-    ][symbol]
+      },
+    }
+    const renderer = renderers[symbol]
 
-    const selection = context.selection ? context.selection() : context
+    const selection = ctx.selection ? ctx.selection() : ctx
     const whiskerPath = d =>
       `M${coor(scale(d.start), -.5 * boxwidth)} l${coor(0, boxwidth)} ` +
       `m${coor(0, -.5 * boxwidth)} L${coor(scale(d.end), 0)}`
@@ -123,28 +119,30 @@ export function boxplot() {
       .merge(box)
 
     // Remove old symbols
-    gPoint.selectAll('.point').filter(function() {return this.nodeName !== pointNodeName}).remove()
+    gPoint.selectAll('.point').filter(function () {
+      return this.nodeName !== renderer.nodeName
+    }).remove()
 
     let point = gPoint.selectAll('.point').data(
       d => showInnerDots ? d.points : d.points.filter(d2 => d2.outlier),
       key ? (d => key(d.datum)) : undefined
     )
     let pointExit = point.exit()
-    point = point.enter().append(pointNodeName)
+    point = point.enter().append(renderer.nodeName)
       .attr('class', 'point')
-      .call(renderPointEnter)
+      .call(renderer.enter)
       .merge(point)
       .classed('outlier', d => d.outlier)
       .classed('farout', d => d.farout)
 
-    if (context !== selection) {
-      gWhisker = gWhisker.transition(context)
-      gBox = gBox.transition(context)
-      gPoint = gPoint.transition(context)
-      whisker = whisker.transition(context)
-      box = box.transition(context)
-      point = point.transition(context)
-      pointExit = pointExit.transition(context)
+    if (ctx !== selection) {
+      gWhisker = gWhisker.transition(ctx)
+      gBox = gBox.transition(ctx)
+      gPoint = gPoint.transition(ctx)
+      whisker = whisker.transition(ctx)
+      box = box.transition(ctx)
+      point = point.transition(ctx)
+      pointExit = pointExit.transition(ctx)
     }
 
     gWhisker
@@ -164,9 +162,9 @@ export function boxplot() {
       .attr(`${y}1`, 0)
       .attr(`${y}2`, 0)
     point
-      .call(renderPointUpdate)
+      .call(renderer.update)
     pointExit
-      .call(renderPointExit)
+      .call(renderer.exit)
       .remove()
 
     return this
@@ -214,5 +212,5 @@ export function boxplotStats(data, valueof) {
   return {fiveNums, iqr, step, fences, boxes, whiskers, points}
 }
 
-export const boxplotSymbolDot = 0
-export const boxplotSymbolTick = 1
+export const boxplotSymbolDot = 'dot'
+export const boxplotSymbolTick = 'tick'
