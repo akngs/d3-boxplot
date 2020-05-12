@@ -1,6 +1,6 @@
 {
   "name": "d3-boxplot",
-  "version": "0.7.5",
+  "version": "0.7.6",
   "description": "d3js plugin for box-and-whisker plot",
   "keywords": [
     "boxplot",
@@ -33,17 +33,17 @@
     "postpublish": "zip -j build/d3-boxplot.zip -- LICENSE README.md build/d3-boxplot.js build/d3-boxplot.min.js"
   },
   "devDependencies": {
-    "d3": "^5.11.0",
-    "eslint": "^5.16.0",
+    "d3": "^5.16.0",
+    "eslint": "^7.0.0",
     "faucet": "0.0.1",
-    "jsdom": "15",
+    "jsdom": "^16.2.2",
     "npm-watch": "^0.6.0",
     "rollup": "0.27.1",
-    "tape": "^4.11.0",
+    "tape": "^5.0.0",
     "uglify-es": "3"
   },
   "dependencies": {
-    "d3-array": "^2.3.1",
-    "d3-scale": "^3.0.1"
+    "d3-array": "^2.4.0",
+    "d3-scale": "^3.2.1"
   }
 }
