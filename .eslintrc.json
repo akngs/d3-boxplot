@@ -11,6 +11,8 @@
   },
   "rules": {
     "no-cond-assign": 0,
-    "no-fallthrough": 0
+    "no-fallthrough": 0,
+    "quotes": ["error", "single"],
+    "semi": ["error", "never"]
   }
 }

@@ -1,6 +1,1 @@
-export {
-  boxplot,
-  boxplotStats,
-  boxplotSymbolDot,
-  boxplotSymbolTick,
-} from "./src/boxplot"
+export { boxplot, boxplotStats, boxplotSymbolDot, boxplotSymbolTick } from './src/boxplot'
