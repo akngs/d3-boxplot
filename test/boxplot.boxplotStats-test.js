@@ -1,9 +1,9 @@
-const tape = require("tape")
-const boxplot = require("../")
+import assert from "assert"
+import { boxplotStats } from '../src/index.js'
 
-tape("Single data point", test => {
-  const stats = boxplot.boxplotStats([5])
-  test.deepEqual(stats, {
+it('Single data point', () => {
+  const stats = boxplotStats([5])
+  assert.deepStrictEqual(stats, {
     fiveNums: [5, 5, 5, 5, 5],
     iqr: 0,
     step: 0,
@@ -24,12 +24,11 @@ tape("Single data point", test => {
     ],
     points: [{value: 5, datum: 5, outlier: false, farout: false}],
   })
-  test.end()
 })
 
-tape("Simple and obvious data", test => {
-  const stats = boxplot.boxplotStats([1, 2, 3, 4, 5])
-  test.deepEqual(stats, {
+it('Simple and obvious data', () => {
+  const stats = boxplotStats([1, 2, 3, 4, 5])
+  assert.deepStrictEqual(stats, {
     fiveNums: [1, 2, 3, 4, 5],
     iqr: 2,
     step: 3,
@@ -56,10 +55,9 @@ tape("Simple and obvious data", test => {
       {value: 5, datum: 5, outlier: false, farout: false},
     ],
   })
-  test.end()
 })
 
-tape("Accessor", test => {
+it('Accessor', () => {
   const data = [
     {x: 1, y: 2},
     {x: 2, y: 3},
@@ -67,8 +65,8 @@ tape("Accessor", test => {
     {x: 4, y: 5},
     {x: 5, y: 6},
   ]
-  const xStats = boxplot.boxplotStats(data, d => d.x)
-  test.deepEqual(xStats, {
+  const xStats = boxplotStats(data, d => d.x)
+  assert.deepStrictEqual(xStats, {
     fiveNums: [1, 2, 3, 4, 5],
     iqr: 2,
     step: 3,
@@ -95,32 +93,30 @@ tape("Accessor", test => {
       {value: 5, datum: {x: 5, y: 6}, outlier: false, farout: false},
     ],
   })
-  test.end()
 })
 
-tape("Boxplot statistics from well-known numbers", test => {
+it('Boxplot statistics from well-known numbers', () => {
   const data = [0, 3, 4.4, 4.5, 4.6, 5, 7]
-  const stats = boxplot.boxplotStats(data)
+  const stats = boxplotStats(data)
 
-  test.deepEqual(
+  assert.deepStrictEqual(
     stats.fiveNums,
     [0, 3.7, 4.5, 4.8, 7]
   )
-  test.deepEqual(
+  assert.deepStrictEqual(
     stats.boxes,
     [{start: 3.7, end: 4.5}, {start: 4.5, end: 4.8}]
   )
-  test.deepEqual(
+  assert.deepStrictEqual(
     stats.whiskers,
     [{start: 3, end: 3.7}, {start: 5, end: 4.8}]
   )
-  test.deepEqual(
+  assert.deepStrictEqual(
     stats.points.map(p => p.outlier),
     [true, false, false, false, false, false, true]
   )
-  test.deepEqual(
+  assert.deepStrictEqual(
     stats.points.map(p => p.farout),
     [true, false, false, false, false, false, false]
   )
-  test.end()
 })

@@ -13,11 +13,7 @@ If you use NPM, `npm install d3-boxplot`. Otherwise, download the
 
 Here's a minimal code snippet:
 
-```html
-<script src="d3.v5.js"></script>
-<script src="d3-boxplot.js"></script>
-
-<script>
+```javascript
 let data = [1, 2, 3, 4, 5]
 let stats = d3.boxplotStats(data)
 let x = d3.scaleLinear()
@@ -25,7 +21,6 @@ let x = d3.scaleLinear()
   .range([0, 300])
 let plot = d3.boxplot().scale(x)
 d3.select('svg').datum(stats).call(plot)
-</script>
 ```
 
 Visit [this page](https://beta.observablehq.com/@akngs/d3-boxplot) to see more examples.

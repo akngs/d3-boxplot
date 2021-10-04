@@ -1,6 +1,4 @@
 .DS_Store
-.idea/
-build/
-node_modules
+dist/
+node_modules/
 npm-debug.log
-*.swp

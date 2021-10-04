@@ -5,14 +5,10 @@
     "ecmaVersion": 8
   },
   "env": {
-    "es6": true,
-    "node": true,
-    "browser": true
+    "es6": true
   },
   "rules": {
     "no-cond-assign": 0,
-    "no-fallthrough": 0,
-    "quotes": ["error", "single"],
-    "semi": ["error", "never"]
+    "no-constant-condition": 0
   }
 }
