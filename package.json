@@ -1,6 +1,6 @@
 {
   "name": "d3-boxplot",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "d3js plugin for box-and-whisker plot",
   "homepage": "https://github.com/akngs/d3-boxplot",
   "repository": {
