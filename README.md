@@ -119,3 +119,10 @@ to disable jittering. The default value is `0.5`. Please note that the jittering
 
 Sets or returns *key* function for [object constancy](https://bost.ocks.org/mike/constancy/). The
 default value is `undefined`.
+
+## Development
+
+To bump version run the followings after commit all changes:
+
+    npm version vx.y.z
+    npm publish
