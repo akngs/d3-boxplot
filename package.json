@@ -51,7 +51,12 @@
   },
   "scripts": {
     "test": "mocha 'test/**/*-test.js' && eslint src test",
-    "prepublishOnly": "rm -rf dist && npm test && rollup -c",
-    "postpublish": "git push && git push --tags"
+    "build": "rm -rf dist && npm test && rollup -c",
+    "push": "git push && git push --tags",
+    "preversion": "npm run test",
+    "version": "npm run build",
+    "postversion": "npm run push",
+    "prepublishOnly": "npm run build",
+    "postpublish": "npm run push"
   }
 }
