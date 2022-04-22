@@ -43,7 +43,7 @@
   "devDependencies": {
     "@rollup/plugin-node-resolve": "13",
     "d3": "7",
-    "eslint": "7",
+    "eslint": "8",
     "jsdom": "17",
     "mocha": "9",
     "rollup": "2",
